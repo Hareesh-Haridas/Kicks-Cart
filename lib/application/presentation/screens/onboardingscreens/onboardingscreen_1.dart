@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kicks_cart/application/presentation/screens/loginscreen/loginscreen.dart';
-import 'package:kicks_cart/application/presentation/screens/onboardingscreens/functions/onboading_functions.dart';
 import 'package:kicks_cart/application/presentation/screens/onboardingscreens/onboarding_data.dart';
 import 'package:kicks_cart/application/presentation/screens/onboardingscreens/onboarding_page.dart';
 import 'package:kicks_cart/application/presentation/screens/onboardingscreens/widgets/onboarding_widgets.dart';
@@ -39,19 +38,19 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
   int currentIndex = 0;
   final PageController _pageController = PageController();
   @override
-  void initState() {
-    checkFirstTime();
-    super.initState();
-  }
+  // void initState() {
+  //   checkFirstTime();
+  //   super.initState();
+  // }
 
-  void checkFirstTime() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isFirstTime = prefs.getBool('firstTime') ?? true;
-    if (!isFirstTime) {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const LoginScreen()));
-    }
-  }
+  // void checkFirstTime() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   bool isFirstTime = prefs.getBool('firstTime') ?? true;
+  //   if (!isFirstTime) {
+  //     Navigator.pushReplacement(context,
+  //         MaterialPageRoute(builder: (context) => const LoginScreen()));
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

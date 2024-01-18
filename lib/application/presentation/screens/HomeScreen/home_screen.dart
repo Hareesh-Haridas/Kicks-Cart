@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:kicks_cart/Widgets/bottom_navigation.dart';
 import 'package:kicks_cart/application/presentation/screens/HomeScreen/Widgets/carousel_slider.dart';
 import 'package:kicks_cart/application/presentation/screens/HomeScreen/Widgets/product_lists.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
