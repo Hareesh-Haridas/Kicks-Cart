@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kicks_cart/Data/Service/auth/authorization_functions.dart';
+import 'package:kicks_cart/application/presentation/screens/HomeScreen/home_screen.dart';
 import 'package:kicks_cart/application/presentation/screens/accountcreationscreen/create_account_screen.dart';
+import 'package:kicks_cart/application/presentation/screens/loginscreen/loginscreen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 
 class FacebookLogo extends StatelessWidget {
@@ -130,7 +133,13 @@ class SignInButton extends StatelessWidget {
       children: [
         Expanded(
           child: MaterialButton(
-            onPressed: () {},
+            onPressed: () {
+              loginUser();
+              if (validatekey.currentState!.validate()) {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const HomeScreen()));
+              }
+            },
             color: Colors.blueGrey[900],
             textColor: kWhite,
             shape:
@@ -173,13 +182,20 @@ class EmailTextfield extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      controller: lEmailController,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
         ),
         hintText: "E-Mail",
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter e-mail';
+        }
+        return null;
+      },
     );
   }
 }

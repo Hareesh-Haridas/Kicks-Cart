@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kicks_cart/Data/Service/auth/config.dart';
 import 'package:kicks_cart/application/presentation/screens/loginscreen/widgets/login_screen_widgets.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,10 +17,24 @@ class LoginScreen extends StatefulWidget {
 }
 
 final GlobalKey<FormState> validatekey = GlobalKey<FormState>();
+TextEditingController lEmailController = TextEditingController();
+TextEditingController lPasswordController = TextEditingController();
+late SharedPreferences prefs;
+bool isNotValidate = false;
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isPasswordVisible = false;
   bool isChecked = false;
+  @override
+  void initState() {
+    super.initState();
+    initSharedPref();
+  }
+
+  void initSharedPref() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +56,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 kHeight10,
                 const EmailTextfield(),
                 kHeight20,
-                TextField(
+                TextFormField(
+                  controller: lPasswordController,
                   obscureText: !isPasswordVisible,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -52,6 +72,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           icon: !isPasswordVisible
                               ? const Icon(Icons.visibility_off)
                               : const Icon(Icons.visibility))),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please Enter Your Password';
+                    }
+                    return null;
+                  },
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,

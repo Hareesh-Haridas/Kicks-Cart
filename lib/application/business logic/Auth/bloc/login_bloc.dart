@@ -14,13 +14,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginBloc() : super(LoginLoading()) {
 
-    // on<SigninButtonTapped>((event, emit) {
-
-
-    //   return emit();
-
-
-    // });
+    on<SigninButtonTapped>((event, emit) => {});
 
   }
 

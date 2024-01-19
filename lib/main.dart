@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kicks_cart/application/presentation/screens/Otp%20screen/otp_screen.dart';
 import 'package:kicks_cart/application/presentation/screens/onboardingscreens/onboardingscreen_1.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
           'Kicks Cart',
           style: GoogleFonts.bangers(fontSize: 40),
         ),
-        nextScreen: const OnboardingScreen1(),
+        nextScreen: OtpScreen(),
         splashTransition: SplashTransition.slideTransition,
       ),
     );

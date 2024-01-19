@@ -6,8 +6,8 @@ import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
+  const HomeScreen({super.key, this.token});
+  final token;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
