@@ -123,8 +123,10 @@ class CreateAccountButton extends StatelessWidget {
 }
 
 class SignInButton extends StatelessWidget {
+  final GlobalKey<FormState> formkey;
   const SignInButton({
     super.key,
+    required this.formkey,
   });
 
   @override
@@ -133,11 +135,9 @@ class SignInButton extends StatelessWidget {
       children: [
         Expanded(
           child: MaterialButton(
-            onPressed: () {
-              loginUser();
-              if (validatekey.currentState!.validate()) {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const HomeScreen()));
+            onPressed: () async {
+              if (formkey.currentState!.validate()) {
+                await loginUser(context);
               }
             },
             color: Colors.blueGrey[900],
@@ -188,11 +188,11 @@ class EmailTextfield extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        hintText: "E-Mail",
+        labelText: "E-Mail",
       ),
       validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter e-mail';
+        if (value == null || value.isEmpty || !value.contains('@')) {
+          return 'Please enter a valid e-mail';
         }
         return null;
       },

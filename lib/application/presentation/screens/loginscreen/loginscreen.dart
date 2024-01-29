@@ -1,13 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:kicks_cart/Data/Service/auth/config.dart';
 import 'package:kicks_cart/application/presentation/screens/loginscreen/widgets/login_screen_widgets.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,13 +11,13 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-final GlobalKey<FormState> validatekey = GlobalKey<FormState>();
 TextEditingController lEmailController = TextEditingController();
 TextEditingController lPasswordController = TextEditingController();
 late SharedPreferences prefs;
 bool isNotValidate = false;
 
 class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   bool isPasswordVisible = false;
   bool isChecked = false;
   @override
@@ -44,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Form(
-            key: validatekey,
+            key: formkey,
             child: Column(
               children: [
                 kHeight38,
@@ -62,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
-                      hintText: "Password",
+                      labelText: "Password",
                       suffixIcon: IconButton(
                           onPressed: () {
                             setState(() {
@@ -104,25 +99,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 kHeight10,
-                const SignInButton(),
+                SignInButton(formkey: formkey),
                 kHeight10,
                 const CreateAccountButton(),
                 kHeight30,
-                const Row(
-                  children: [
-                    kWidth30,
-                    RightLine(),
-                    kWidth10,
-                    SignInOptionText(),
-                    kWidth10,
-                    RightLine(),
-                  ],
-                ),
-                kHeight30,
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [GoogleButton(), kWidth20, FacebookLogo()],
-                )
               ],
             ),
           ),

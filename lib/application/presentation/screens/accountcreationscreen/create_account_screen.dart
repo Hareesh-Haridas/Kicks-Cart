@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kicks_cart/Data/Service/auth/authorization_functions.dart';
 import 'package:kicks_cart/application/presentation/screens/accountcreationscreen/widgets/account_creation_widgets.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
@@ -10,16 +11,17 @@ class CreateAccountScreen extends StatefulWidget {
   State<CreateAccountScreen> createState() => _CreateAccountScreenState();
 }
 
-final GlobalKey<FormState> validatekey2 = GlobalKey<FormState>();
 TextEditingController sNameController = TextEditingController();
 TextEditingController sEmailController = TextEditingController();
 TextEditingController sPhoneNumberController = TextEditingController();
 TextEditingController sPasswordController = TextEditingController();
 TextEditingController sLastNameController = TextEditingController();
+
 bool isPasswordVisible = false;
 bool isChecked = false;
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
+  final GlobalKey<FormState> validatekey2 = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +47,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
-                      hintText: "Password",
+                      labelText: "Password",
                       suffixIcon: IconButton(
                         onPressed: () {
                           setState(() {
@@ -84,27 +86,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   const PrivacyPolicyButton()
                 ],
               ),
-              const SignInButton(),
-              kHeight20,
-              const Row(
-                children: [
-                  kWidth30,
-                  RightLine(),
-                  kWidth10,
-                  SignInOptionText(),
-                  kWidth10,
-                  RightLine()
-                ],
+              SignInButton(
+                validatekey2: validatekey2,
               ),
-              kHeight10,
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GoogleButton(),
-                  kWidth10,
-                  FacebookLogo(),
-                ],
-              )
             ],
           ),
         ),

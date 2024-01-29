@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           'Kicks Cart',
           style: GoogleFonts.bangers(fontSize: 40),
         ),
-        nextScreen: OtpScreen(),
+        nextScreen: const OnboardingScreen1(),
         splashTransition: SplashTransition.slideTransition,
       ),
     );
