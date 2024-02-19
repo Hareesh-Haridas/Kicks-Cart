@@ -142,12 +142,12 @@ class FirstName extends StatelessWidget {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             labelText: "First Name",
             prefixIcon: const Icon(Icons.person_2_outlined)),
-        // validator: (value) {
-        //   if (value == null || value.isEmpty) {
-        //     return 'Please Enter your Name';
-        //   }
-        //   return null;
-        // },
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please Enter your First Name';
+          }
+          return null;
+        },
       ),
     );
   }
@@ -168,12 +168,12 @@ class LastName extends StatelessWidget {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             labelText: "Last Name",
             prefixIcon: const Icon(Icons.person_2_outlined)),
-        // validator: (value) {
-        //   if (value == null || value.isEmpty) {
-        //     return 'Please enter your Last Name';
-        //   }
-        //   return null;
-        // },
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter your Last Name';
+          }
+          return null;
+        },
       ),
     );
   }
@@ -194,11 +194,11 @@ class EMail extends StatelessWidget {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             labelText: "E-mail",
             prefixIcon: const Icon(Icons.mail_outline)),
-        // validator: (value) {
-        //   if (value == null || value.isEmpty || !value.contains('@')) {
-        //     return 'Please enter a valid Email';
-        //   }
-        // },
+        validator: (value) {
+          if (value == null || value.isEmpty || !value.contains('@')) {
+            return 'Please enter a valid Email';
+          }
+        },
       ),
     );
   }
@@ -220,11 +220,11 @@ class PhoneNumber extends StatelessWidget {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             labelText: "Phone Number",
             prefixIcon: const Icon(Icons.call_outlined)),
-        // validator: (value) {
-        //   if (value == null || value.isEmpty || value.length != 10) {
-        //     return 'Mobile Number must be of 10 digit';
-        //   }
-        // },
+        validator: (value) {
+          if (value == null || value.isEmpty || value.length != 10) {
+            return 'Mobile Number must be of 10 digits';
+          }
+        },
       ),
     );
   }
@@ -280,7 +280,9 @@ class SignInButton extends StatelessWidget {
           child: MaterialButton(
             onPressed: () async {
               print("BUTTON PRESSED");
-              await signUp(context);
+              if (validatekey2.currentState!.validate()) {
+                await signUp(context);
+              }
             },
             color: Colors.blueGrey[900],
             textColor: Colors.white,
@@ -290,7 +292,7 @@ class SignInButton extends StatelessWidget {
             height: 50,
             minWidth: MediaQuery.of(context).size.width * 0.9,
             child: const Text(
-              "Sign in",
+              "Sign Up",
               style: TextStyle(
                 fontSize: 20,
               ),

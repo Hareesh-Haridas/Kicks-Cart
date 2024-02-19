@@ -23,74 +23,87 @@ bool isChecked = false;
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final GlobalKey<FormState> validatekey2 = GlobalKey<FormState>();
   @override
+  void initState() {
+    super.initState();
+    sNameController.clear();
+    sEmailController.clear();
+    sPhoneNumberController.clear();
+    sPasswordController.clear();
+    sLastNameController.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: kWhite,
       body: SafeArea(
-        child: Form(
-          key: validatekey2,
-          child: Column(
-            children: [
-              const ArrowBackButton(),
-              const CreateAccountText(),
-              kHeight20,
-              const FirstName(),
-              const LastName(),
-              const EMail(),
-              const PhoneNumber(),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextFormField(
-                  controller: sPasswordController,
-                  obscureText: !isPasswordVisible,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      labelText: "Password",
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            isPasswordVisible = !isPasswordVisible;
-                          });
-                        },
-                        icon: !isPasswordVisible
-                            ? const Icon(Icons.visibility_off_outlined)
-                            : const Icon(Icons.visibility_outlined),
-                      ),
-                      prefixIcon: const Icon(Icons.lock_outline)),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your Password';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+              key: validatekey2,
+              child: Column(
                 children: [
-                  kWidth20,
-                  Checkbox(
-                    activeColor: Colors.blue,
-                    value: isChecked,
-                    onChanged: (bool? value) {
-                      setState(
-                        () {
-                          isChecked = value!;
-                        },
-                      );
-                    },
+                  const ArrowBackButton(),
+                  const CreateAccountText(),
+                  kHeight20,
+                  const FirstName(),
+                  const LastName(),
+                  const EMail(),
+                  const PhoneNumber(),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextFormField(
+                      controller: sPasswordController,
+                      obscureText: !isPasswordVisible,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          labelText: "Password",
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                isPasswordVisible = !isPasswordVisible;
+                              });
+                            },
+                            icon: !isPasswordVisible
+                                ? const Icon(Icons.visibility_off_outlined)
+                                : const Icon(Icons.visibility_outlined),
+                          ),
+                          prefixIcon: const Icon(Icons.lock_outline)),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your Password';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
-                  const AgreeText(),
-                  const PrivacyPolicyButton()
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      kWidth20,
+                      Checkbox(
+                        activeColor: Colors.blue,
+                        value: isChecked,
+                        onChanged: (bool? value) {
+                          setState(
+                            () {
+                              isChecked = value!;
+                            },
+                          );
+                        },
+                      ),
+                      const AgreeText(),
+                      const PrivacyPolicyButton()
+                    ],
+                  ),
+                  SignInButton(
+                    validatekey2: validatekey2,
+                  ),
                 ],
-              ),
-              SignInButton(
-                validatekey2: validatekey2,
-              ),
-            ],
-          ),
+              )),
         ),
       ),
     );

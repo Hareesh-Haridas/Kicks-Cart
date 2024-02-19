@@ -1,13 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:kicks_cart/Data/Service/auth/authorization_functions.dart';
+import 'package:kicks_cart/Domain/models/categoryModel/category_model.dart';
+import 'package:kicks_cart/application/business%20logic/category/bloc/bloc/category_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/HomeScreen/Widgets/carousel_slider.dart';
 import 'package:kicks_cart/application/presentation/screens/HomeScreen/Widgets/product_lists.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, this.token});
   final token;
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+late CategoryBloc categoryBloc;
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    categoryBloc = context.read<CategoryBloc>();
+    categoryBloc.add(FetchCategoriesEvent());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    categoryBloc = context.read<CategoryBloc>();
+    categoryBloc.add(FetchCategoriesEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +60,15 @@ class HomeScreen extends StatelessWidget {
                       Icons.shopping_cart_outlined,
                       color: kWhite,
                     ),
-                  )
+                  ),
+                  IconButton(
+                      onPressed: () async {
+                        await logOut(context);
+                      },
+                      icon: Icon(
+                        Icons.exit_to_app,
+                        color: kWhite,
+                      ))
                 ],
               ),
               const Row(
@@ -101,38 +135,55 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
               kHeight10,
-              Container(
-                height: 100,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 10,
-                    itemBuilder: (BuildContext context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 60,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: kWhite,
-                              ),
-                              child: Image.asset(
-                                'assets/homescreen/crocs.png',
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            const Text(
-                              "Crocs",
-                              style: TextStyle(color: kWhite),
-                            )
-                          ],
-                        ),
+              BlocBuilder<CategoryBloc, CategoryState>(
+                builder: (context, state) {
+                  if (state is LoadingCategoryState) {
+                    return const CircularProgressIndicator();
+                  } else if (state is LoadedCategoryState) {
+                    List<BrandModel>? categories = state.categories;
+                    if (categories.isEmpty) {
+                      return const Text('No Categories Available');
+                    } else {
+                      return Container(
+                        height: 100,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: categories.length,
+                            itemBuilder: (BuildContext context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: 60,
+                                      height: 60,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: kWhite,
+                                      ),
+                                      child: Image.network(
+                                        categories[index].image,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      categories[index].name,
+                                      style: const TextStyle(color: kWhite),
+                                    )
+                                  ],
+                                ),
+                              );
+                            }),
                       );
-                    }),
+                    }
+                  } else if (state is ErrorCategoryState) {
+                    return Text('Error ${state.error}');
+                  } else {
+                    return Text('Unknown Error');
+                  }
+                },
               ),
               Container(
                 width: MediaQuery.of(context).size.width, height: 1000,
@@ -177,40 +228,6 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        color: Colors.blueGrey[900],
-        child: const Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 15.0,
-            vertical: 20,
-          ),
-          child: GNav(
-            color: kWhite,
-            activeColor: kWhite,
-            tabBackgroundColor: Colors.amber,
-            gap: 8,
-            padding: EdgeInsets.all(11),
-            tabs: [
-              GButton(
-                icon: Icons.home_outlined,
-                text: 'Home',
-              ),
-              GButton(
-                icon: Icons.storefront_outlined,
-                text: 'Store',
-              ),
-              GButton(
-                icon: Icons.favorite_outline,
-                text: 'Likes',
-              ),
-              GButton(
-                icon: Icons.person_2_outlined,
-                text: 'Profile',
               )
             ],
           ),
