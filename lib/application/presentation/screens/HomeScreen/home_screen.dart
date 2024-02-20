@@ -4,6 +4,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:kicks_cart/Data/Service/auth/authorization_functions.dart';
 import 'package:kicks_cart/Domain/models/categoryModel/category_model.dart';
 import 'package:kicks_cart/application/business%20logic/category/bloc/bloc/category_bloc.dart';
+import 'package:kicks_cart/application/business%20logic/product/bloc/bloc/product_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/HomeScreen/Widgets/carousel_slider.dart';
 import 'package:kicks_cart/application/presentation/screens/HomeScreen/Widgets/product_lists.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 late CategoryBloc categoryBloc;
+late ProductBloc productBloc;
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
@@ -25,6 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     categoryBloc = context.read<CategoryBloc>();
     categoryBloc.add(FetchCategoriesEvent());
+    productBloc = context.read<ProductBloc>();
+    productBloc.add(FetchProductsEvent());
   }
 
   @override
@@ -32,6 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.didChangeDependencies();
     categoryBloc = context.read<CategoryBloc>();
     categoryBloc.add(FetchCategoriesEvent());
+    productBloc = context.read<ProductBloc>();
+    productBloc.add(FetchProductsEvent());
   }
 
   @override
@@ -161,8 +167,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                         shape: BoxShape.circle,
                                         color: kWhite,
                                       ),
-                                      child: Image.network(
-                                        categories[index].image,
+                                      child: ClipOval(
+                                        child: Image.network(
+                                          categories[index].image,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(
