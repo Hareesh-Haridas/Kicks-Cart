@@ -3,11 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kicks_cart/Data/Service/products/config.dart';
 import 'package:kicks_cart/Domain/models/product/product_model.dart';
 import 'package:kicks_cart/application/business%20logic/product/bloc/bloc/product_bloc.dart';
+import 'package:kicks_cart/application/presentation/screens/HomeScreen/Widgets/product_list_widget.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
 class ProductLists extends StatefulWidget {
-  const ProductLists({super.key});
+  const ProductLists({
+    super.key,
+  });
 
   @override
   State<ProductLists> createState() => _ProductListsState();
@@ -36,6 +39,11 @@ class _ProductListsState extends State<ProductLists> {
                   childAspectRatio: 0.75,
                 ),
                 itemBuilder: (_, int index) {
+                  detailName = products[index].productName;
+                  detailPrice = products[index].productPrice;
+                  detailDescription = products[index].productDescription;
+                  detailStock = products[index].stock;
+                  detailId = products[index].id;
                   String imageFileName = products[index].productImage[0];
                   print(products[index].productImage[0]);
                   List<String> fileNames =
@@ -77,12 +85,12 @@ class _ProductListsState extends State<ProductLists> {
                             ],
                           ),
                           // kHeight10,
-                          Image.network(
-                            imageUrl,
-                            fit: BoxFit.cover,
-                            height: 90,
-                            width: 150,
-                          ),
+                          // Image.network(
+                          //   imageUrl,
+                          //   fit: BoxFit.cover,
+                          //   height: 90,
+                          //   width: 150,
+                          // ),
                           Text(
                             products[index].productName,
                             style: const TextStyle(
