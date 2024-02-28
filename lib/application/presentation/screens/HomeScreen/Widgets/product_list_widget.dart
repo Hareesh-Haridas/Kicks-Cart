@@ -17,11 +17,11 @@ class ProductListWidget extends StatefulWidget {
   State<ProductListWidget> createState() => _ProductListWidgetState();
 }
 
-late String detailName;
-late int detailPrice;
-late String detailDescription;
-late int detailStock;
-late String detailId;
+// late String detailName;
+// late int detailPrice;
+// late String detailDescription;
+// late int detailStock;
+// late String detailId;
 
 class _ProductListWidgetState extends State<ProductListWidget> {
   @override
@@ -64,19 +64,7 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                 ],
               ),
             ),
-            GestureDetector(
-                // onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                //     builder: (context) => ProductDetailScreen(
-                //           description: detailDescription,
-                //           name: detailName,
-                //           price: detailPrice,
-                //           stock: detailStock,
-                //           id: detailId,
-                //         ))),
-                onTap: () async {
-                  await fetchProductDetail(detailId, widget.context);
-                },
-                child: ProductLists()),
+            ProductLists(),
           ],
         ),
       ),

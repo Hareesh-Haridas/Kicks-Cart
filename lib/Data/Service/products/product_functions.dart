@@ -5,12 +5,13 @@ import 'package:kicks_cart/Data/Service/products/config.dart';
 import 'package:kicks_cart/Domain/models/product/getProductModel/get_product_model.dart';
 import 'package:kicks_cart/Domain/models/product/product_model.dart';
 import 'package:kicks_cart/application/presentation/screens/ProductDetailScreen/product_detail_screen.dart';
+import 'package:kicks_cart/application/presentation/utils/colors.dart';
 
 Future<List<ProductModel>> getProducts() async {
   String? authToken = await getAuthToken();
   try {
     final response = await Dio().get(getProductUrl,
-        options: Options(headers: {'Authorization': 'Bearer $authToken'}));
+        options: Options(headers: {'Authorization': '$authToken'}));
     print(response.data);
     if (response.statusCode == 200 || response.statusCode == 201) {
       List<ProductModel> products = (response.data['data'] as List)
@@ -27,24 +28,17 @@ Future<List<ProductModel>> getProducts() async {
   }
 }
 
-Future<GetProductModel> fetchProductDetail(
-    String id, BuildContext context) async {
+Future<GetProductModel> fetchProductDetail(String id) async {
   String? authToken = await getAuthToken();
 
   try {
     final response = await Dio().get('$fetchProductUrl/$id',
-        options: Options(headers: {'Authorization': 'Bearer $authToken'}));
+        options: Options(headers: {'Authorization': '$authToken'}));
     print(response.data);
     if (response.statusCode == 200 || response.statusCode == 201) {
       GetProductModel getProductModel =
           GetProductModel.fromJson(response.data['data']);
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ProductDetailScreen(
-              name: getProductModel.productName,
-              price: getProductModel.productPrice,
-              description: getProductModel.productDescription,
-              stock: getProductModel.stock,
-              id: getProductModel.id)));
+
       return getProductModel;
     } else {
       print('Failed to fetch products');

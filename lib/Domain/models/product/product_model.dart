@@ -1,5 +1,3 @@
-import 'package:kicks_cart/Data/Service/auth/config.dart';
-
 class ProductModel {
   final List<dynamic> productImage;
   final String productName;

@@ -8,7 +8,7 @@ Future<List<BrandModel>> getCategories() async {
   print(authToken);
   try {
     final response = await Dio().get(getCategoryUrl,
-        options: Options(headers: {'Authorization': 'Bearer $authToken'}));
+        options: Options(headers: {'Authorization': '$authToken'}));
     print(response.data);
     if (response.statusCode == 200 || response.statusCode == 201) {
       List<BrandModel> categories = (response.data['data'] as List)

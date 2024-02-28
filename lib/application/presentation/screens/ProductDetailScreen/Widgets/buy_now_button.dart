@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kicks_cart/Data/Service/cart/cart_functions.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
-class AddToCartBuyNowWidgets extends StatelessWidget {
-  final String id;
-  const AddToCartBuyNowWidgets({
+class BuyNowButton extends StatelessWidget {
+  const BuyNowButton({
     super.key,
-    required this.id,
   });
 
   @override
@@ -18,10 +15,10 @@ class AddToCartBuyNowWidgets extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           MaterialButton(
-            onPressed: () async {
-              await addToCart(id, context);
+            onPressed: () {
+              // Your onPressed logic here
             },
-            color: kBlueGrey,
+            color: Colors.amber,
             textColor: kWhite,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -30,14 +27,9 @@ class AddToCartBuyNowWidgets extends StatelessWidget {
             child: const Row(
               children: [
                 kWidth30,
-                Icon(
-                  Icons.add_shopping_cart_outlined,
-                  color: kWhite,
-                ),
-                kWidth10,
                 Text(
-                  'Add to Cart',
-                  style: TextStyle(color: kWhite, fontSize: 20),
+                  'Buy Now',
+                  style: TextStyle(color: kBlack, fontSize: 20),
                 ),
               ],
             ),

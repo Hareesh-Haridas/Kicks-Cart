@@ -4,6 +4,7 @@ import 'package:kicks_cart/Data/Service/products/config.dart';
 import 'package:kicks_cart/Domain/models/product/product_model.dart';
 import 'package:kicks_cart/application/business%20logic/product/bloc/bloc/product_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/HomeScreen/Widgets/product_list_widget.dart';
+import 'package:kicks_cart/application/presentation/screens/ProductDetailScreen/product_detail_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
@@ -15,6 +16,8 @@ class ProductLists extends StatefulWidget {
   @override
   State<ProductLists> createState() => _ProductListsState();
 }
+
+late String productId;
 
 class _ProductListsState extends State<ProductLists> {
   @override
@@ -39,76 +42,75 @@ class _ProductListsState extends State<ProductLists> {
                   childAspectRatio: 0.75,
                 ),
                 itemBuilder: (_, int index) {
-                  detailName = products[index].productName;
-                  detailPrice = products[index].productPrice;
-                  detailDescription = products[index].productDescription;
-                  detailStock = products[index].stock;
-                  detailId = products[index].id;
                   String imageFileName = products[index].productImage[0];
-                  print(products[index].productImage[0]);
-                  List<String> fileNames =
-                      extractFilenames(products[index].productImage);
-                  print(fileNames[0]);
-                  print('imageFileName---------$imageFileName');
-                  String imageUrl = '$productUrl/$fileNames';
-                  print('image---------$imageUrl');
+
+                  String imageUrl = '$productUrl/$imageFileName';
+
+                  productId = products[index].id;
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 300,
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey[300]!,
-                            offset: const Offset(5.0, 5.0),
-                            blurRadius: 10.0,
-                            spreadRadius: 2.0,
-                          ),
-                          const BoxShadow(
-                              color: kWhite,
-                              offset: Offset(0.0, 0.0),
-                              blurRadius: 0.0,
-                              spreadRadius: 0.0)
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.favorite_outline),
-                              ),
-                            ],
-                          ),
-                          // kHeight10,
-                          // Image.network(
-                          //   imageUrl,
-                          //   fit: BoxFit.cover,
-                          //   height: 90,
-                          //   width: 150,
-                          // ),
-                          Text(
-                            products[index].productName,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w300, fontSize: 18),
-                          ),
-                          kHeight10,
-                          Row(
-                            children: [
-                              kWidth10,
-                              Text(
-                                products[index].productPrice.toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ProductDetailScreen(
+                                productId: products[index].id)));
+                      },
+                      child: Container(
+                        height: 300,
+                        decoration: BoxDecoration(
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey[300]!,
+                              offset: const Offset(5.0, 5.0),
+                              blurRadius: 10.0,
+                              spreadRadius: 2.0,
+                            ),
+                            const BoxShadow(
+                                color: kWhite,
+                                offset: Offset(0.0, 0.0),
+                                blurRadius: 0.0,
+                                spreadRadius: 0.0)
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.favorite_outline),
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
+                              ],
+                            ),
+                            kHeight10,
+                            Image.network(
+                              imageUrl,
+                              fit: BoxFit.cover,
+                              height: 90,
+                              width: 150,
+                            ),
+                            Text(
+                              products[index].productName,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w300, fontSize: 18),
+                            ),
+                            kHeight10,
+                            Row(
+                              children: [
+                                kWidth10,
+                                Text(
+                                  products[index].productPrice.toString(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   );

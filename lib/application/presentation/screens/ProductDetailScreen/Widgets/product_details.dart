@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
 class ProductNameWidget extends StatefulWidget {
-  final String productName;
+  final String name;
   const ProductNameWidget({
     super.key,
-    required this.productName,
+    required this.name,
   });
 
   @override
@@ -19,7 +19,7 @@ class _ProductNameWidgetState extends State<ProductNameWidget> {
       children: [
         kWidth30,
         Text(
-          widget.productName,
+          widget.name,
           style: TextStyle(
             fontSize: 25,
           ),
@@ -30,10 +30,10 @@ class _ProductNameWidgetState extends State<ProductNameWidget> {
 }
 
 class ProductPriceWidget extends StatefulWidget {
-  final int productPrice;
+  final int price;
   const ProductPriceWidget({
     super.key,
-    required this.productPrice,
+    required this.price,
   });
 
   @override
@@ -44,13 +44,7 @@ class _ProductPriceWidgetState extends State<ProductPriceWidget> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [
-        kWidth30,
-        Text(
-          widget.productPrice.toString(),
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        )
-      ],
+      children: [kWidth30, Text(widget.price.toString())],
     );
   }
 }
@@ -75,10 +69,10 @@ class ProductDescriptionWidget extends StatelessWidget {
 }
 
 class ProductDescriptionDetail extends StatefulWidget {
-  final String productDescription;
+  final String description;
   const ProductDescriptionDetail({
     super.key,
-    required this.productDescription,
+    required this.description,
   });
 
   @override
@@ -92,7 +86,7 @@ class _ProductDescriptionDetailState extends State<ProductDescriptionDetail> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8),
       child: Row(
-        children: [kWidth30, Expanded(child: Text(widget.productDescription))],
+        children: [kWidth30, Expanded(child: Text(widget.description))],
       ),
     );
   }
