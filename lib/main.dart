@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kicks_cart/Data/Service/auth/authorization_functions.dart';
 import 'package:kicks_cart/application/Widgets/bottomNavigationWidget/root_page.dart';
 import 'package:kicks_cart/application/business%20logic/bottomNav/bloc/bottom_navigation_bloc.dart';
+import 'package:kicks_cart/application/business%20logic/cart/bloc/cart_bloc.dart';
 import 'package:kicks_cart/application/business%20logic/category/bloc/bloc/category_bloc.dart';
 import 'package:kicks_cart/application/business%20logic/product/bloc/bloc/product_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/loginscreen/loginscreen.dart';
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<BottomNavigationBloc>(
             create: (context) => BottomNavigationBloc()),
         BlocProvider<CategoryBloc>(create: (context) => CategoryBloc()),
-        BlocProvider<ProductBloc>(create: (context) => ProductBloc())
+        BlocProvider<ProductBloc>(create: (context) => ProductBloc()),
+        BlocProvider<CartBloc>(create: (context) => CartBloc())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

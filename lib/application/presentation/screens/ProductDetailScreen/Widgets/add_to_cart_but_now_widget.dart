@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kicks_cart/Data/Service/cart/cart_functions.dart';
+import 'package:kicks_cart/application/presentation/screens/ProductDetailScreen/Widgets/filter_chip.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
@@ -19,7 +20,7 @@ class AddToCartBuyNowWidgets extends StatelessWidget {
         children: [
           MaterialButton(
             onPressed: () async {
-              await addToCart(id, context);
+              await addToCart(id, context, selectedSize);
             },
             color: kBlueGrey,
             textColor: kWhite,

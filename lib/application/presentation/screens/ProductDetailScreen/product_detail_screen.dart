@@ -6,6 +6,7 @@ import 'package:kicks_cart/Domain/models/product/product_model.dart';
 import 'package:kicks_cart/application/presentation/screens/ProductDetailScreen/Widgets/add_to_cart_but_now_widget.dart';
 import 'package:kicks_cart/application/presentation/screens/ProductDetailScreen/Widgets/buy_now_button.dart';
 import 'package:kicks_cart/application/presentation/screens/ProductDetailScreen/Widgets/divider_widget.dart';
+import 'package:kicks_cart/application/presentation/screens/ProductDetailScreen/Widgets/filter_chip.dart';
 import 'package:kicks_cart/application/presentation/screens/ProductDetailScreen/Widgets/image_widget.dart';
 import 'package:kicks_cart/application/presentation/screens/ProductDetailScreen/Widgets/product_details.dart';
 import 'package:kicks_cart/application/presentation/screens/ProductDetailScreen/Widgets/stock_indicator_wishlist_button.dart';
@@ -75,6 +76,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ProductDescriptionDetail(
                       description: productModel.productDescription,
                     ),
+                    kHeight10,
+                    const Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: Divider(),
+                    ),
+                    SizeSelector(),
                     kHeight10,
                     const Padding(
                       padding: EdgeInsets.all(15.0),

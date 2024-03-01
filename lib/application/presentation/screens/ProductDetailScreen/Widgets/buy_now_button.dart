@@ -18,7 +18,7 @@ class BuyNowButton extends StatelessWidget {
             onPressed: () {
               // Your onPressed logic here
             },
-            color: Colors.amber,
+            color: Colors.green,
             textColor: kWhite,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -29,7 +29,7 @@ class BuyNowButton extends StatelessWidget {
                 kWidth30,
                 Text(
                   'Buy Now',
-                  style: TextStyle(color: kBlack, fontSize: 20),
+                  style: TextStyle(color: kWhite, fontSize: 20),
                 ),
               ],
             ),
