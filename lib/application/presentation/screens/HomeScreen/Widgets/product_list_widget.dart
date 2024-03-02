@@ -64,7 +64,9 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                 ],
               ),
             ),
-            ProductLists(),
+            ProductLists(
+              context: widget.context,
+            ),
           ],
         ),
       ),

@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kicks_cart/Data/Service/favorites/favorites_functions.dart';
 import 'package:kicks_cart/Data/Service/products/config.dart';
 import 'package:kicks_cart/Domain/models/product/product_model.dart';
 import 'package:kicks_cart/application/business%20logic/product/bloc/bloc/product_bloc.dart';
+import 'package:kicks_cart/application/business%20logic/wishlist/bloc/bloc/wish_list_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/HomeScreen/Widgets/product_list_widget.dart';
 import 'package:kicks_cart/application/presentation/screens/ProductDetailScreen/product_detail_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
 class ProductLists extends StatefulWidget {
+  final BuildContext context;
   const ProductLists({
     super.key,
+    required this.context,
   });
 
   @override
@@ -80,8 +84,16 @@ class _ProductListsState extends State<ProductLists> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.favorite_outline),
+                                  onPressed: () async {
+                                    await addFavorite(
+                                            products[index].id, widget.context)
+                                        .whenComplete(() => context
+                                            .read<WishListBloc>()
+                                            .add(FetchwishListEvent()));
+                                  },
+                                  icon: Icon(
+                                    Icons.favorite_outline,
+                                  ),
                                 ),
                               ],
                             ),

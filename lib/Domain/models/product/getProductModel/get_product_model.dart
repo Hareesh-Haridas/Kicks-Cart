@@ -7,7 +7,7 @@ class GetProductModel {
   final String category;
   String message;
   final String id;
-
+  bool isFavorite;
   GetProductModel(
       {required this.productImage,
       required this.productName,
@@ -16,7 +16,8 @@ class GetProductModel {
       required this.stock,
       required this.category,
       required this.message,
-      required this.id});
+      required this.id,
+      this.isFavorite = false});
   factory GetProductModel.fromJson(Map<String, dynamic> json) {
     return GetProductModel(
         productImage: json['image'] != null ? List.from(json['image']) : [],
