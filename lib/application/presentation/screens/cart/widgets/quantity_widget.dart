@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kicks_cart/Data/Service/cart/cart_functions.dart';
 import 'package:kicks_cart/application/business%20logic/cart/bloc/cart_bloc.dart';
+import 'package:kicks_cart/application/presentation/screens/checkoutScreen/checkout_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 
 class QuantityController extends StatefulWidget {
@@ -111,7 +112,10 @@ class _QuantityControllerState extends State<QuantityController> {
               style: TextStyle(color: kBlack),
             )),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => CheckoutScreen()));
+          },
           child: Text(
             'Buy Now',
             style: TextStyle(color: kWhite),

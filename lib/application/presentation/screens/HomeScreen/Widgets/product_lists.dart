@@ -22,6 +22,7 @@ class ProductLists extends StatefulWidget {
 }
 
 late String productId;
+List<String> homeProductId = [];
 
 class _ProductListsState extends State<ProductLists> {
   @override
@@ -46,6 +47,9 @@ class _ProductListsState extends State<ProductLists> {
                   childAspectRatio: 0.75,
                 ),
                 itemBuilder: (_, int index) {
+                  for (int i = 0; i < products.length; i++) {
+                    homeProductId.add(products[index].id);
+                  }
                   String imageFileName = products[index].productImage[0];
 
                   String imageUrl = '$productUrl/$imageFileName';
@@ -91,7 +95,7 @@ class _ProductListsState extends State<ProductLists> {
                                             .read<WishListBloc>()
                                             .add(FetchwishListEvent()));
                                   },
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.favorite_outline,
                                   ),
                                 ),
