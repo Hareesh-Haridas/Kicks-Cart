@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kicks_cart/Domain/models/categoryModel/category_model.dart';
 import 'package:kicks_cart/application/business%20logic/category/bloc/bloc/category_bloc.dart';
+import 'package:kicks_cart/application/presentation/screens/CategoryDetailScreen/category_detail_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 
 class CategoryWidget extends StatelessWidget {
@@ -20,7 +21,7 @@ class CategoryWidget extends StatelessWidget {
           if (categories.isEmpty) {
             return const Text('No Categories Available');
           } else {
-            return Container(
+            return SizedBox(
               height: 100,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -30,22 +31,29 @@ class CategoryWidget extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: kWhite,
-                            ),
-                            child: ClipOval(
-                              child: Image.network(
-                                categories[index].image,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  print("Error loading image: $error");
-                                  print("Stack trace: $stackTrace");
-                                  return const Text('No Image');
-                                },
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => CategoryDetailScreen(
+                                      name: categories[index].name)));
+                            },
+                            child: Container(
+                              width: 60,
+                              height: 60,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: kWhite,
+                              ),
+                              child: ClipOval(
+                                child: Image.network(
+                                  categories[index].image,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    print("Error loading image: $error");
+                                    print("Stack trace: $stackTrace");
+                                    return const Text('No Image');
+                                  },
+                                ),
                               ),
                             ),
                           ),
