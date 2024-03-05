@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kicks_cart/application/presentation/screens/searchScreen/search_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
@@ -12,32 +13,36 @@ class Searchwidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: 50,
-          decoration: BoxDecoration(
-            color: kWhite,
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  kWidth30,
-                  Icon(
-                    Icons.search,
-                    color: kGrey,
-                  ),
-                  kWidth10,
-                  Text(
-                    "Search in Store",
-                    style: TextStyle(color: kGrey),
-                  )
-                ],
-              )
-            ],
+        GestureDetector(
+          onTap: () => Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => SearchScreen())),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: 50,
+            decoration: BoxDecoration(
+              color: kWhite,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    kWidth30,
+                    Icon(
+                      Icons.search,
+                      color: kGrey,
+                    ),
+                    kWidth10,
+                    Text(
+                      "Search in Store",
+                      style: TextStyle(color: kGrey),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         )
       ],

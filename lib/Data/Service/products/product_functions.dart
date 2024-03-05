@@ -65,3 +65,27 @@ Future<GetProductModel> fetchProductDetail(String id) async {
         id: '');
   }
 }
+
+Future<List<GetProductModel>> getSearchedProducts(String query) async {
+  print('SEARCH PRODUCT FUNCTION CALLED///////');
+  print('$searchProductUrl/$query');
+  String? authToken = await getAuthToken();
+  try {
+    final response = await Dio().get('$searchProductUrl/$query',
+        options: Options(headers: {'Authorization': 'Bearer $authToken'}));
+    print('Search Result-------${response.data}');
+    bool status = response.data['status'];
+    if (status) {
+      List<GetProductModel> products = (response.data['data'] as List)
+          .map((json) => GetProductModel.fromJson(json))
+          .toList();
+      return products;
+    } else {
+      print('failed to search products');
+      return [];
+    }
+  } catch (e) {
+    print('Error Searching products $e');
+    return [];
+  }
+}

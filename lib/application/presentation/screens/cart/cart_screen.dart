@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kicks_cart/Data/Service/products/config.dart';
 import 'package:kicks_cart/Domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
 import 'package:kicks_cart/application/business%20logic/cart/bloc/cart_bloc.dart';
+import 'package:kicks_cart/application/presentation/screens/ProductDetailScreen/product_detail_screen.dart';
 import 'package:kicks_cart/application/presentation/screens/cart/widgets/quantity_widget.dart';
 import 'package:kicks_cart/application/presentation/screens/cart/widgets/text_widgets.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
@@ -64,70 +65,76 @@ class _CartScreenState extends State<CartScreen> {
                         itemBuilder: (context, index) {
                           String imageFileName = cart[index].image[0];
                           String imageUrl = '$productUrl/$imageFileName';
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 20),
-                            height: 200,
-                            width: 300,
-                            decoration:
-                                BoxDecoration(border: Border.all(color: kGrey)),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: Column(
-                                children: [
-                                  kHeight10,
-                                  Row(
-                                    children: [
-                                      Container(
-                                        height: 90,
-                                        width: 80,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(color: kGrey)),
-                                        child: Image.network(
-                                          imageUrl,
-                                          fit: BoxFit.cover,
+                          return GestureDetector(
+                            onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => ProductDetailScreen(
+                                        productId: cart[index].id))),
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 20),
+                              height: 200,
+                              width: 300,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: kGrey)),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: Column(
+                                  children: [
+                                    kHeight10,
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 90,
+                                          width: 80,
+                                          decoration: BoxDecoration(
+                                              border: Border.all(color: kGrey)),
+                                          child: Image.network(
+                                            imageUrl,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
-                                      ),
-                                      kWidth30,
-                                      SizedBox(
-                                        height: 100,
-                                        width: 200,
-                                        // decoration: BoxDecoration(border: Border.all()),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              cart[index].name,
-                                              style:
-                                                  const TextStyle(fontSize: 20),
-                                            ),
-                                            kHeight10,
-                                            Text(
-                                              'Size: ${cart[index].size}',
-                                              style:
-                                                  const TextStyle(fontSize: 15),
-                                            ),
-                                            kHeight10,
-                                            Text(
-                                              'Rs.${cart[index].price.toString()}',
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 23),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  kHeight10,
-                                  QuantityText(),
-                                  SizedBox(height: 5),
-                                  QuantityController(
-                                    id: cart[index].id,
-                                    context: context,
-                                  )
-                                ],
+                                        kWidth30,
+                                        SizedBox(
+                                          height: 100,
+                                          width: 200,
+                                          // decoration: BoxDecoration(border: Border.all()),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                cart[index].name,
+                                                style: const TextStyle(
+                                                    fontSize: 20),
+                                              ),
+                                              kHeight10,
+                                              Text(
+                                                'Size: ${cart[index].size}',
+                                                style: const TextStyle(
+                                                    fontSize: 15),
+                                              ),
+                                              kHeight10,
+                                              Text(
+                                                'Rs.${cart[index].price.toString()}',
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 23),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    kHeight10,
+                                    QuantityText(),
+                                    SizedBox(height: 5),
+                                    QuantityController(
+                                      id: cart[index].id,
+                                      context: context,
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           );

@@ -4,6 +4,7 @@ import 'package:kicks_cart/Data/Service/cart/cart_functions.dart';
 import 'package:kicks_cart/Data/Service/products/config.dart';
 import 'package:kicks_cart/Domain/models/wishlist/get_wishlist_model.dart';
 import 'package:kicks_cart/application/business%20logic/wishlist/bloc/bloc/wish_list_bloc.dart';
+import 'package:kicks_cart/application/presentation/screens/ProductDetailScreen/product_detail_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 
 class FavoriteProducts extends StatefulWidget {
@@ -44,68 +45,75 @@ class _FavoriteProductsState extends State<FavoriteProducts> {
                   String imageUrl = '$productUrl/$imageFileName';
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Container(
-                      height: 300,
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        children: [
-                          Image.network(
-                            imageUrl,
-                            fit: BoxFit.cover,
-                            height: 90,
-                            width: 150,
-                          ),
-                          Text(
-                            wishList[index].name,
-                            style: const TextStyle(fontSize: 15),
-                          ),
-                          Text(
-                            wishList[index].price.toString(),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextButton.icon(
-                              onPressed: () async {
-                                showDialog(
-                                    context: widget.context,
-                                    builder: (_) => AlertDialog(
-                                          title: const Text(
-                                              'Delete from Wishlist'),
-                                          content: const Text(
-                                              'Are you Sure you want to delete?'),
-                                          actions: [
-                                            TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('Cancel')),
-                                            TextButton(
-                                                onPressed: () async {
-                                                  await deleteCart(
-                                                          wishList[index].id,
-                                                          widget.context)
-                                                      .whenComplete(() => widget
-                                                          .context
-                                                          .read<WishListBloc>()
-                                                          .add(
-                                                              FetchwishListEvent()));
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('Delete'))
-                                          ],
-                                        ));
-                              },
-                              icon: const Icon(
-                                Icons.delete,
-                                color: kRed,
-                              ),
-                              label: const Text(
-                                'Remove',
-                                style: TextStyle(color: kBlack),
-                              ))
-                        ],
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ProductDetailScreen(
+                              productId: wishList[index].id))),
+                      child: Container(
+                        height: 300,
+                        decoration: BoxDecoration(
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          children: [
+                            Image.network(
+                              imageUrl,
+                              fit: BoxFit.cover,
+                              height: 90,
+                              width: 150,
+                            ),
+                            Text(
+                              wishList[index].name,
+                              style: const TextStyle(fontSize: 15),
+                            ),
+                            Text(
+                              wishList[index].price.toString(),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextButton.icon(
+                                onPressed: () async {
+                                  showDialog(
+                                      context: widget.context,
+                                      builder: (_) => AlertDialog(
+                                            title: const Text(
+                                                'Delete from Wishlist'),
+                                            content: const Text(
+                                                'Are you Sure you want to delete?'),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text('Cancel')),
+                                              TextButton(
+                                                  onPressed: () async {
+                                                    await deleteCart(
+                                                            wishList[index].id,
+                                                            widget.context)
+                                                        .whenComplete(() => widget
+                                                            .context
+                                                            .read<
+                                                                WishListBloc>()
+                                                            .add(
+                                                                FetchwishListEvent()));
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text('Delete'))
+                                            ],
+                                          ));
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: kRed,
+                                ),
+                                label: const Text(
+                                  'Remove',
+                                  style: TextStyle(color: kBlack),
+                                ))
+                          ],
+                        ),
                       ),
                     ),
                   );
