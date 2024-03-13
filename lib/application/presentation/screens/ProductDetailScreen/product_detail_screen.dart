@@ -89,6 +89,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                     StockIndicatorWishlistWidget(
                       stock: productModel.stock,
+                      id: productModel.id,
                     ),
                     const DividerWidget(),
                     AddToCartBuyNowWidgets(

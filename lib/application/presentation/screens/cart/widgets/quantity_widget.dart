@@ -94,7 +94,7 @@ class _QuantityControllerState extends State<QuantityController> {
                           TextButton(
                               onPressed: () async {
                                 await deleteCart(widget.id, widget.context)
-                                    .whenComplete(() => widget.context
+                                    .whenComplete(() => context
                                         .read<CartBloc>()
                                         .add(FetchCartEvent()));
                                 Navigator.of(context).pop();

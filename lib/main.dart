@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kicks_cart/Data/Service/auth/authorization_functions.dart';
 import 'package:kicks_cart/application/Widgets/bottomNavigationWidget/root_page.dart';
+import 'package:kicks_cart/application/business%20logic/address/bloc/bloc/address_bloc.dart';
 import 'package:kicks_cart/application/business%20logic/bottomNav/bloc/bottom_navigation_bloc.dart';
 import 'package:kicks_cart/application/business%20logic/cart/bloc/cart_bloc.dart';
 import 'package:kicks_cart/application/business%20logic/category/bloc/bloc/category_bloc.dart';
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<CategoryBloc>(create: (context) => CategoryBloc()),
         BlocProvider<ProductBloc>(create: (context) => ProductBloc()),
         BlocProvider<CartBloc>(create: (context) => CartBloc()),
-        BlocProvider<WishListBloc>(create: (context) => WishListBloc())
+        BlocProvider<WishListBloc>(create: (context) => WishListBloc()),
+        BlocProvider<AddressBloc>(create: (context) => AddressBloc())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
