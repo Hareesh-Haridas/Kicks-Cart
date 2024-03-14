@@ -19,7 +19,7 @@ class GetAddressModel {
         name: json['name'] ?? '',
         phoneNumber: json['phoneNumber'] ?? 0,
         streetName: json['streetName'] ?? '',
-        pinCode: json['pinCode'] ?? 0,
+        pinCode: json['postalCode'] ?? 0,
         cityName: json['cityName'] ?? '',
         countryName: json['countryName'] ?? '',
         id: json['_id'] != null ? json['_id'].toString() : "");

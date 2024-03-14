@@ -1,47 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:kicks_cart/application/presentation/screens/addAddressScreen/add_address_screen.dart';
-import 'package:kicks_cart/application/presentation/screens/addAddressScreen/widgets/save_address_button.dart';
+import 'package:kicks_cart/application/presentation/screens/editAddressScreen/widgets/save_changes_button.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
-class AddressTextFormFields extends StatefulWidget {
-  const AddressTextFormFields({
-    super.key,
-  });
+class EditAddressTextFormFields extends StatefulWidget {
+  const EditAddressTextFormFields({super.key});
 
   @override
-  State<AddressTextFormFields> createState() => _AddressTextFormFieldsState();
+  State<EditAddressTextFormFields> createState() =>
+      _EditAddressTextFormFieldsState();
 }
 
-TextEditingController addressNameController = TextEditingController();
-TextEditingController addressPhoneNumberController = TextEditingController();
-TextEditingController streetController = TextEditingController();
-TextEditingController postalCodeController = TextEditingController();
-TextEditingController cityController = TextEditingController();
-TextEditingController countryController = TextEditingController();
+TextEditingController editNamecontroller = TextEditingController();
+TextEditingController editPhoneNumbercontroller = TextEditingController();
+TextEditingController editStreetNamecontroller = TextEditingController();
+TextEditingController editPostalCodecontroller = TextEditingController();
+TextEditingController editCityNamecontroller = TextEditingController();
+TextEditingController editCountryNamecontroller = TextEditingController();
 
-class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
+class _EditAddressTextFormFieldsState extends State<EditAddressTextFormFields> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         kHeight30,
         TextFormField(
-          controller: addressNameController,
-          decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Name',
-              prefixIcon: Icon(Icons.person_outline)),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please Enter Your Name';
-            }
-            return null;
-          },
-        ),
+            controller: editNamecontroller,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Name',
+                prefixIcon: Icon(Icons.person_outline)),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please Enter Your Name';
+              }
+              return null;
+            }),
         kHeight10,
         TextFormField(
+          controller: editPhoneNumbercontroller,
           keyboardType: TextInputType.number,
-          controller: addressPhoneNumberController,
           decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Phone Number',
@@ -57,7 +54,7 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
         ),
         kHeight10,
         TextFormField(
-          controller: streetController,
+          controller: editStreetNamecontroller,
           decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Street',
@@ -71,8 +68,8 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
         ),
         kHeight10,
         TextFormField(
+          controller: editPostalCodecontroller,
           keyboardType: TextInputType.number,
-          controller: postalCodeController,
           decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Postal Code',
@@ -86,7 +83,7 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
         ),
         kHeight10,
         TextFormField(
-          controller: cityController,
+          controller: editCityNamecontroller,
           decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'City',
@@ -100,7 +97,7 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
         ),
         kHeight10,
         TextFormField(
-          controller: countryController,
+          controller: editCountryNamecontroller,
           decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Country',
@@ -113,7 +110,6 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
           },
         ),
         kHeight20,
-        SaveAddressButton()
       ],
     );
   }

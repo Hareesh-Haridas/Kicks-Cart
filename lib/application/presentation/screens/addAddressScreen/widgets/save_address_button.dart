@@ -1,25 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kicks_cart/Data/Service/address/adress_functions.dart';
 import 'package:kicks_cart/Domain/models/address/add_address_model.dart';
+import 'package:kicks_cart/application/business%20logic/address/bloc/bloc/address_bloc.dart';
+import 'package:kicks_cart/application/presentation/screens/addAddressScreen/add_address_screen.dart';
+import 'package:kicks_cart/application/presentation/screens/addAddressScreen/widgets/text_form_field_widgets.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 
 class SaveAddressButton extends StatefulWidget {
-  final String name;
-  final int phoneNumber;
-  final String streetName;
-  final int postalCode;
-  final String cityName;
-  final String countryName;
-  final GlobalKey<FormState> addressFormkey;
   const SaveAddressButton({
     super.key,
-    required this.addressFormkey,
-    required this.name,
-    required this.phoneNumber,
-    required this.streetName,
-    required this.postalCode,
-    required this.cityName,
-    required this.countryName,
   });
 
   @override
@@ -34,22 +24,18 @@ class _SaveAddressButtonState extends State<SaveAddressButton> {
         Expanded(
           child: MaterialButton(
             onPressed: () async {
-              AddAddressModel addAddressModel = AddAddressModel(
-                  name: widget.name,
-                  phoneNumber: widget.phoneNumber,
-                  streetName: widget.streetName,
-                  postalCode: widget.postalCode,
-                  cityName: widget.cityName,
-                  countryName: widget.countryName);
-              if (widget.addressFormkey.currentState!.validate()) {
+              if (addressFormKey.currentState!.validate()) {
+                await Future.delayed(const Duration(milliseconds: 50));
                 await addAddress(
-                    context,
-                    addAddressModel.name,
-                    addAddressModel.phoneNumber,
-                    addAddressModel.streetName,
-                    addAddressModel.postalCode,
-                    addAddressModel.cityName,
-                    addAddressModel.countryName);
+                        context,
+                        addressNameController.text,
+                        int.tryParse(addressPhoneNumberController.text) ?? 0,
+                        streetController.text,
+                        int.tryParse(postalCodeController.text) ?? 0,
+                        cityController.text,
+                        countryController.text)
+                    .whenComplete(() =>
+                        context.read<AddressBloc>().add(FetchAddressEvent()));
               }
             },
             color: Colors.blueGrey[900],

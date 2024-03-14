@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kicks_cart/Data/Service/address/adress_functions.dart';
 import 'package:kicks_cart/Domain/models/address/get_address_model.dart';
 import 'package:kicks_cart/application/business%20logic/address/bloc/bloc/address_bloc.dart';
+import 'package:kicks_cart/application/presentation/screens/editAddressScreen/edit_address_screen.dart';
+import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
 class AddressCard extends StatefulWidget {
@@ -32,7 +35,7 @@ class _AddressCardState extends State<AddressCard> {
                     return Column(
                       children: [
                         Container(
-                          height: 130,
+                          height: 160,
                           width: 300,
                           decoration: BoxDecoration(
                               border: Border.all(),
@@ -42,11 +45,93 @@ class _AddressCardState extends State<AddressCard> {
                             child: Column(
                               children: [
                                 Text(address[index].name),
-                                Text(address[index].phoneNumber.toString()),
+                                Text(
+                                    'Ph No: ${address[index].phoneNumber.toString()}'),
                                 kHeight10,
-                                Expanded(
-                                    child: Text(
-                                        'sdnfsjdncjsdncjksndckjsndcjksndcjnksdkjcnsjdcnsd'))
+                                Row(
+                                  children: [
+                                    Expanded(
+                                        child: Text(
+                                            '${address[index].streetName}|Postal Code: ${address[index].pinCode}|${address[index].cityName}|${address[index].countryName}')),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    IconButton(
+                                        onPressed: () async {
+                                          showDialog(
+                                              context: context,
+                                              builder: (_) => AlertDialog(
+                                                    title: const Text(
+                                                        'Delete Address'),
+                                                    content: const Text(
+                                                        'Are you Sure you want to delete this Address?'),
+                                                    actions: [
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: const Text(
+                                                              'Cancel')),
+                                                      TextButton(
+                                                          onPressed: () async {
+                                                            await deleteAddress(
+                                                                    address[index]
+                                                                        .id,
+                                                                    context)
+                                                                .whenComplete(
+                                                                    () => context
+                                                                        .read<
+                                                                            AddressBloc>()
+                                                                        .add(
+                                                                            FetchAddressEvent()));
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: const Text(
+                                                              'Delete'))
+                                                    ],
+                                                  ));
+                                        },
+                                        icon: const Icon(
+                                          Icons.delete_outlined,
+                                          color: kRed,
+                                        )),
+                                    IconButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditAddressScreen(
+                                                        city: address[index]
+                                                            .cityName,
+                                                        country: address[index]
+                                                            .countryName,
+                                                        id: address[index].id,
+                                                        name:
+                                                            address[index].name,
+                                                        phoneNumber:
+                                                            address[index]
+                                                                .phoneNumber,
+                                                        postalCode:
+                                                            address[index]
+                                                                .pinCode,
+                                                        street: address[index]
+                                                            .streetName,
+                                                      )));
+                                        },
+                                        icon: const Icon(
+                                          Icons.edit_outlined,
+                                          color: kGreen,
+                                        ))
+                                  ],
+                                )
                               ],
                             ),
                           ),

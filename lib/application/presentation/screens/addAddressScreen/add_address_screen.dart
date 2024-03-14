@@ -12,14 +12,20 @@ class AddAddressScreen extends StatefulWidget {
   State<AddAddressScreen> createState() => _AddAddressScreenState();
 }
 
+final GlobalKey<FormState> addressFormKey = GlobalKey<FormState>();
+
 class _AddAddressScreenState extends State<AddAddressScreen> {
-  final GlobalKey<FormState> addressFormKey = GlobalKey<FormState>();
-  TextEditingController addressNameController = TextEditingController();
-  TextEditingController addressPhoneNumberController = TextEditingController();
-  TextEditingController streetController = TextEditingController();
-  TextEditingController postalCodeController = TextEditingController();
-  TextEditingController cityController = TextEditingController();
-  TextEditingController countryController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    addressNameController.clear();
+    addressPhoneNumberController.clear();
+    streetController.clear();
+    postalCodeController.clear();
+    cityController.clear();
+    countryController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,24 +41,8 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               const AddNewAddressHeading(),
               Form(
                 key: addressFormKey,
-                child: AddressTextFormFields(
-                  cityNameController: cityController,
-                  countryNameController: countryController,
-                  nameController: addressNameController,
-                  phoneNumberController: addressPhoneNumberController,
-                  postalCodeController: postalCodeController,
-                  streetController: streetController,
-                ),
+                child: AddressTextFormFields(),
               ),
-              SaveAddressButton(
-                  addressFormkey: addressFormKey,
-                  name: addressNameController.text,
-                  phoneNumber:
-                      int.tryParse(addressPhoneNumberController.text) ?? 0,
-                  streetName: streetController.text,
-                  postalCode: int.tryParse(postalCodeController.text) ?? 0,
-                  cityName: cityController.text,
-                  countryName: countryController.text)
             ],
           ),
         ),
