@@ -4,39 +4,24 @@ import 'package:kicks_cart/Data/Service/cart/cart_functions.dart';
 import 'package:kicks_cart/application/business%20logic/cart/bloc/cart_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/checkoutScreen/checkout_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
+import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
 class QuantityController extends StatefulWidget {
+  final int stock;
   final String id;
   final BuildContext context;
   const QuantityController({
     super.key,
     required this.id,
     required this.context,
+    required this.stock,
   });
 
   @override
   State<QuantityController> createState() => _QuantityControllerState();
 }
 
-int counter = 1;
-
 class _QuantityControllerState extends State<QuantityController> {
-  void increment() {
-    setState(() {
-      counter++;
-    });
-  }
-
-  void decrement() {
-    setState(() {
-      if (counter > 1) {
-        counter--;
-      } else {
-        counter = 1;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -47,8 +32,12 @@ class _QuantityControllerState extends State<QuantityController> {
           width: 30,
           decoration: BoxDecoration(color: kWhite, border: Border.all()),
           child: IconButton(
-              onPressed: () {
-                decrement();
+              onPressed: () async {
+                if (widget.stock - 1 >= 1) {
+                  await editQuantity(widget.stock - 1, widget.id, context)
+                      .whenComplete(
+                          () => context.read<CartBloc>().add(FetchCartEvent()));
+                }
               },
               icon: const Icon(
                 Icons.minimize,
@@ -61,7 +50,7 @@ class _QuantityControllerState extends State<QuantityController> {
           width: 40,
           decoration: BoxDecoration(border: Border.all()),
           child: Text(
-            ' $counter',
+            ' ${widget.stock}',
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
@@ -70,14 +59,17 @@ class _QuantityControllerState extends State<QuantityController> {
           width: 30,
           decoration: BoxDecoration(color: kWhite, border: Border.all()),
           child: IconButton(
-              onPressed: () {
-                increment();
+              onPressed: () async {
+                await editQuantity(widget.stock + 1, widget.id, context)
+                    .whenComplete(
+                        () => context.read<CartBloc>().add(FetchCartEvent()));
               },
               icon: const Icon(
                 Icons.add,
                 color: kBlack,
               )),
         ),
+        kWidth100,
         TextButton.icon(
             onPressed: () async {
               showDialog(
@@ -103,28 +95,14 @@ class _QuantityControllerState extends State<QuantityController> {
                         ],
                       ));
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.delete,
               color: kRed,
             ),
-            label: Text(
+            label: const Text(
               'Remove',
               style: TextStyle(color: kBlack),
             )),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => CheckoutScreen()));
-          },
-          child: Text(
-            'Buy Now',
-            style: TextStyle(color: kWhite),
-          ),
-          style: ElevatedButton.styleFrom(
-              backgroundColor: kGreen,
-              shape: BeveledRectangleBorder(
-                  borderRadius: BorderRadius.circular(2))),
-        )
       ],
     );
   }

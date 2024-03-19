@@ -29,7 +29,7 @@ Future<List<GetCartModel>> getCart() async {
     final response = await Dio().get(getCartUrl,
         options: Options(headers: {'Authorization': '$authToken'}));
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // print('RESPONSE FROM GET CART ${response.data["datas"]}');
+      print('RESPONSE FROM GET CART ${response.data["datas"]}');
       List<GetCartModel> getCartModel = (response.data['datas'] as List)
           .map((json) => GetCartModel.fromJson(json))
           .toList();
@@ -53,6 +53,24 @@ Future<void> deleteCart(String id, BuildContext context) async {
     cartShowSnackBar(context, deleteCartMessage);
   } catch (e) {
     print('Error deleting category $e');
+  }
+}
+
+Future<void> editQuantity(int value, String id, BuildContext context) async {
+  String? authToken = await getAuthToken();
+  Map<String, dynamic> data = {'value': value, 'id': id};
+  try {
+    print(data);
+    final response = await Dio().post(editCartUrl,
+        data: data, options: Options(headers: {'Authorization': '$authToken'}));
+    bool status = response.data['status'] ?? false;
+    String editQuantitymessage = response.data['message'] ?? '';
+    cartShowSnackBar(context, editQuantitymessage);
+    if (status) {
+      getCart();
+    }
+  } catch (e) {
+    print('Error editing Quantity $e');
   }
 }
 
