@@ -10,6 +10,7 @@ class QuantityController extends StatefulWidget {
   final int stock;
   final String id;
   final BuildContext context;
+
   const QuantityController({
     super.key,
     required this.id,

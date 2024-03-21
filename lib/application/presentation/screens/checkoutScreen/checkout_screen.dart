@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kicks_cart/application/presentation/screens/changeAddressScreen/change_address_screen.dart';
 import 'package:kicks_cart/application/presentation/screens/checkoutScreen/widgets/product_detail_widget.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
@@ -58,9 +59,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         children: [
                           Text(
                             'Subtotal',
-                            style: TextStyle(fontSize: 17),
+                            style: const TextStyle(fontSize: 17),
                           ),
-                          Text('Rs.2000')
+                          Text('₹2000')
                         ],
                       ),
                       kHeight38,
@@ -68,10 +69,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Shipping Fee',
+                            'Shipping Charge',
                             style: TextStyle(fontSize: 17),
                           ),
-                          Text('Rs.10')
+                          Text('₹10')
                         ],
                       ),
                       kHeight38,
@@ -84,8 +85,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 fontSize: 17, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            'Rs.2010',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            '₹2010',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
                           )
                         ],
                       ),
@@ -100,10 +102,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             style: TextStyle(
                                 fontSize: 17, fontWeight: FontWeight.bold),
                           ),
-                          Text(
-                            'Change',
-                            style: TextStyle(color: kGrey),
-                          )
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        ChangeAddressScreen()));
+                              },
+                              child: Text(
+                                'Change',
+                                style: TextStyle(color: kGrey),
+                              ))
                         ],
                       ),
                       kHeight30,
@@ -138,7 +146,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           ),
                         ],
                       ),
-                      kHeight30,
+                      kHeight10,
                       MaterialButton(
                         onPressed: () {
                           // Your onPressed logic here

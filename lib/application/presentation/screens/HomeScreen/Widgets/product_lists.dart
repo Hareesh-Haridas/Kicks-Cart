@@ -111,14 +111,15 @@ class _ProductListsState extends State<ProductLists> {
                             Text(
                               products[index].productName,
                               style: const TextStyle(
-                                  fontWeight: FontWeight.w300, fontSize: 18),
+                                  fontWeight: FontWeight.w300, fontSize: 15),
                             ),
                             kHeight10,
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 kWidth10,
                                 Text(
-                                  products[index].productPrice.toString(),
+                                  '₹${products[index].productPrice.toString()}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
