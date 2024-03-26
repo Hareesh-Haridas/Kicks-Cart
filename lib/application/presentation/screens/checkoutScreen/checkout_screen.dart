@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kicks_cart/Data/Service/order/order_functions.dart';
 import 'package:kicks_cart/Domain/models/address/get_address_model.dart';
 import 'package:kicks_cart/application/business%20logic/address/bloc/bloc/address_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/changeAddressScreen/change_address_screen.dart';
 import 'package:kicks_cart/application/presentation/screens/checkoutScreen/widgets/product_detail_widget.dart';
+import 'package:kicks_cart/application/presentation/screens/orderPlacedScreen/order_placed_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  const CheckoutScreen({super.key});
+  final int subTotal;
+  const CheckoutScreen({super.key, required this.subTotal});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -77,6 +80,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         phoneNumber = address[i].phoneNumber;
                         otherDetails = address[i].cityName;
                         print('Name : $name');
+                        break;
                       }
                     }
                     return Container(
@@ -90,14 +94,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         child: Column(
                           children: [
                             kHeight20,
-                            const Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
+                                const Text(
                                   'Subtotal',
                                   style: TextStyle(fontSize: 17),
                                 ),
-                                Text('₹2000')
+                                Text(widget.subTotal.toString())
                               ],
                             ),
                             kHeight38,
@@ -149,7 +153,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     ))
                               ],
                             ),
-                            Row(
+                            const Row(
                               children: [Text('Cash on Delivery')],
                             ),
                             kHeight30,
@@ -182,7 +186,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     ))
                               ],
                             ),
-                            kHeight30,
+                            // kHeight30,
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -194,7 +198,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ),
                               ],
                             ),
-                            kHeight30,
+                            // kHeight30,
                             Row(
                               children: [
                                 const Icon(Icons.call),
@@ -222,8 +226,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ),
                             kHeight10,
                             MaterialButton(
-                              onPressed: () {
-                                // Your onPressed logic here
+                              onPressed: () async {
+                                await placeorder(
+                                    selected, 'cash on delivery', context);
                               },
                               color: Colors.green,
                               textColor: kWhite,

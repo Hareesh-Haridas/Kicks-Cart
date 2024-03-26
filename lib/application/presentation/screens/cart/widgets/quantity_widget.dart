@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kicks_cart/Data/Service/cart/cart_functions.dart';
 import 'package:kicks_cart/application/business%20logic/cart/bloc/cart_bloc.dart';
-import 'package:kicks_cart/application/presentation/screens/checkoutScreen/checkout_screen.dart';
+import 'package:kicks_cart/application/business%20logic/total_amount/bloc/bloc/total_amount_bloc.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
@@ -37,7 +37,10 @@ class _QuantityControllerState extends State<QuantityController> {
                 if (widget.stock - 1 >= 1) {
                   await editQuantity(widget.stock - 1, widget.id, context)
                       .whenComplete(
-                          () => context.read<CartBloc>().add(FetchCartEvent()));
+                          () => context.read<CartBloc>().add(FetchCartEvent()))
+                      .whenComplete(() => context
+                          .read<TotalAmountBloc>()
+                          .add(FetchAmountEvent()));
                 }
               },
               icon: const Icon(
@@ -63,7 +66,10 @@ class _QuantityControllerState extends State<QuantityController> {
               onPressed: () async {
                 await editQuantity(widget.stock + 1, widget.id, context)
                     .whenComplete(
-                        () => context.read<CartBloc>().add(FetchCartEvent()));
+                        () => context.read<CartBloc>().add(FetchCartEvent()))
+                    .whenComplete(() => context
+                        .read<TotalAmountBloc>()
+                        .add(FetchAmountEvent()));
               },
               icon: const Icon(
                 Icons.add,

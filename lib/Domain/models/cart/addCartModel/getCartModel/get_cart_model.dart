@@ -5,13 +5,15 @@ class GetCartModel {
   final String size;
   final String id;
   final int stock;
+  final int totalAmount;
   GetCartModel(
       {required this.image,
       required this.name,
       required this.price,
       required this.size,
       required this.id,
-      required this.stock});
+      required this.stock,
+      required this.totalAmount});
   factory GetCartModel.fromJson(Map<String, dynamic> json) {
     return GetCartModel(
         image: json['image'] != null ? List.from(json['image']) : [],
@@ -19,6 +21,7 @@ class GetCartModel {
         price: json['price'] ?? 0,
         size: json['size'] ?? '',
         id: json['_id'] != null ? json['_id'].toString() : "",
-        stock: json['quantity'] ?? 0);
+        stock: json['quantity'] ?? 0,
+        totalAmount: json['totalPrice'] != null ? json['totalPrice'] : 0);
   }
 }

@@ -14,10 +14,11 @@ class ProductDetailWidget extends StatelessWidget {
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
         if (state is LoadingCartState) {
-          return Center(child: const CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (state is LoadedCartState) {
           List<GetCartModel> cart = state.cart;
           return ListView.builder(
+            physics: const ScrollPhysics(),
             shrinkWrap: true,
             itemCount: cart.length,
             itemBuilder: (context, index) {

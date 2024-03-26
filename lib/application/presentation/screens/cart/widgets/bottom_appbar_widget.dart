@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kicks_cart/Domain/models/cart/total_amount/total_amount_model.dart';
 import 'package:kicks_cart/application/business%20logic/cart/bloc/cart_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/checkoutScreen/checkout_screen.dart';
 
@@ -17,6 +18,19 @@ class Bottomappbar extends StatefulWidget {
 class _BottomappbarState extends State<Bottomappbar> {
   bool showBottomAppbar = false;
   @override
+  void initState() {
+    super.initState();
+    final cartBloc = context.read<CartBloc>();
+    cartBloc.stream.listen((state) {
+      if (state is LoadedCartState) {
+        setState(() {
+          showBottomAppbar = state.cart.isNotEmpty;
+        });
+      }
+    });
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final cartBloc = context.read<CartBloc>();
@@ -31,6 +45,7 @@ class _BottomappbarState extends State<Bottomappbar> {
 
   @override
   Widget build(BuildContext context) {
+    print('TOTAL AMOUNT-------${widget.totalAmount}');
     return showBottomAppbar
         ? BottomAppBar(
             child: Container(
@@ -43,14 +58,16 @@ class _BottomappbarState extends State<Bottomappbar> {
                   ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => CheckoutScreen()));
+                          builder: (context) => CheckoutScreen(
+                                subTotal: widget.totalAmount,
+                              )));
                     },
-                    child: Text('Place Order'),
+                    child: const Text('Place Order'),
                   )
                 ],
               ),
             ),
           )
-        : SizedBox.shrink();
+        : const SizedBox.shrink();
   }
 }

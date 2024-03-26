@@ -4,6 +4,7 @@ import 'package:kicks_cart/Data/Service/auth/authorization_functions.dart';
 import 'package:kicks_cart/Data/Service/cart/config.dart';
 import 'package:kicks_cart/Domain/models/cart/addCartModel/add_to_cart_model.dart';
 import 'package:kicks_cart/Domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
+import 'package:kicks_cart/Domain/models/cart/total_amount/total_amount_model.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 
 Future<void> addToCart(String id, BuildContext context, String size) async {
@@ -29,7 +30,6 @@ Future<List<GetCartModel>> getCart() async {
     final response = await Dio().get(getCartUrl,
         options: Options(headers: {'Authorization': '$authToken'}));
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print('RESPONSE FROM GET CART ${response.data["datas"]}');
       List<GetCartModel> getCartModel = (response.data['datas'] as List)
           .map((json) => GetCartModel.fromJson(json))
           .toList();
@@ -41,6 +41,25 @@ Future<List<GetCartModel>> getCart() async {
   } catch (e) {
     // print('Error Fetching Cart $e');
     return [];
+  }
+}
+
+Future<int> getTotalAmount() async {
+  String? authToken = await getAuthToken();
+  try {
+    final response = await Dio().get(getCartUrl,
+        options: Options(headers: {'Authorization': '$authToken'}));
+    bool status = response.data['status'];
+
+    if (status) {
+      int totalPrice = response.data['totalPrice'];
+
+      return totalPrice;
+    } else {
+      return 0;
+    }
+  } catch (e) {
+    return 0;
   }
 }
 

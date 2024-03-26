@@ -7,6 +7,7 @@ import 'package:kicks_cart/application/business%20logic/bottomNav/bloc/bottom_na
 import 'package:kicks_cart/application/business%20logic/cart/bloc/cart_bloc.dart';
 import 'package:kicks_cart/application/business%20logic/category/bloc/bloc/category_bloc.dart';
 import 'package:kicks_cart/application/business%20logic/product/bloc/bloc/product_bloc.dart';
+import 'package:kicks_cart/application/business%20logic/total_amount/bloc/bloc/total_amount_bloc.dart';
 import 'package:kicks_cart/application/business%20logic/wishlist/bloc/bloc/wish_list_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/loginscreen/loginscreen.dart';
 import 'package:kicks_cart/application/presentation/screens/onboardingscreens/onboardingscreen_1.dart';
@@ -30,7 +31,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<ProductBloc>(create: (context) => ProductBloc()),
         BlocProvider<CartBloc>(create: (context) => CartBloc()),
         BlocProvider<WishListBloc>(create: (context) => WishListBloc()),
-        BlocProvider<AddressBloc>(create: (context) => AddressBloc())
+        BlocProvider<AddressBloc>(create: (context) => AddressBloc()),
+        BlocProvider<TotalAmountBloc>(create: (context) => TotalAmountBloc())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
