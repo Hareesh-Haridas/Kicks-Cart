@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kicks_cart/Data/Service/auth/authorization_functions.dart';
-import 'package:kicks_cart/application/presentation/screens/HomeScreen/home_screen.dart';
+import 'package:kicks_cart/data/Service/auth/authorization_functions.dart';
+
 import 'package:kicks_cart/application/presentation/screens/accountcreationscreen/create_account_screen.dart';
 import 'package:kicks_cart/application/presentation/screens/loginscreen/loginscreen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
@@ -102,7 +102,7 @@ class CreateAccountButton extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CreateAccountScreen()));
+                      builder: (context) => const CreateAccountScreen()));
             },
             textColor: kBlack,
             shape: RoundedRectangleBorder(
@@ -137,7 +137,8 @@ class SignInButton extends StatelessWidget {
           child: MaterialButton(
             onPressed: () async {
               if (formkey.currentState!.validate()) {
-                await loginUser(context);
+                AuthService authService = AuthService();
+                await authService.loginUser(context);
               }
             },
             color: Colors.blueGrey[900],

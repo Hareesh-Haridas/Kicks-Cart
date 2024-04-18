@@ -22,6 +22,6 @@ class GetCartModel {
         size: json['size'] ?? '',
         id: json['_id'] != null ? json['_id'].toString() : "",
         stock: json['quantity'] ?? 0,
-        totalAmount: json['totalPrice'] != null ? json['totalPrice'] : 0);
+        totalAmount: json['totalPrice'] ?? 0);
   }
 }

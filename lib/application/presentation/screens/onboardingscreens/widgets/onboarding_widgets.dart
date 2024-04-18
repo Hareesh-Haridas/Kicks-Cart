@@ -4,8 +4,8 @@ import 'package:kicks_cart/application/presentation/screens/onboardingscreens/fu
 import 'package:kicks_cart/application/presentation/screens/onboardingscreens/onboarding_data.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 
-class onboardingElevatedButton extends StatelessWidget {
-  const onboardingElevatedButton({
+class OnboardingElevatedButton extends StatelessWidget {
+  const OnboardingElevatedButton({
     super.key,
     required this.currentIndex,
     required this.onboardingData,

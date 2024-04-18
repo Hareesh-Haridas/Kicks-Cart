@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kicks_cart/application/Widgets/bottomNavigationWidget/bottom_navigation.dart';
-import 'package:kicks_cart/application/business%20logic/bottomNav/bloc/bottom_navigation_bloc.dart';
-import 'package:kicks_cart/application/presentation/screens/FavoritesScreen/favorite_screen.dart';
-import 'package:kicks_cart/application/presentation/screens/HomeScreen/home_screen.dart';
-import 'package:kicks_cart/application/presentation/screens/ProfileScreen/profile_screen.dart';
-import 'package:kicks_cart/application/presentation/screens/StoreScreen/store_screen.dart';
+import 'package:kicks_cart/application/widgets/bottomNavigationWidget/bottom_navigation.dart';
+import 'package:kicks_cart/application/business_logic/bottom_nav/bloc/bottom_navigation_bloc.dart';
+import 'package:kicks_cart/application/presentation/screens/favorites_screen/favorite_screen.dart';
+import 'package:kicks_cart/application/presentation/screens/home_screen/home_screen.dart';
+import 'package:kicks_cart/application/presentation/screens/profile_screen/profile_screen.dart';
+import 'package:kicks_cart/application/presentation/screens/store_screen/store_screen.dart';
 
 class RootPage extends StatelessWidget {
   const RootPage({super.key});

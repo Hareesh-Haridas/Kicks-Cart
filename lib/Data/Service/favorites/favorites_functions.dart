@@ -1,52 +1,55 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:kicks_cart/Data/Service/auth/authorization_functions.dart';
-import 'package:kicks_cart/Data/Service/favorites/config.dart';
+import 'package:kicks_cart/data/Service/auth/authorization_functions.dart';
+import 'package:kicks_cart/data/Service/favorites/config.dart';
 import 'package:kicks_cart/Domain/models/wishlist/get_wishlist_model.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 
-Future<void> addFavorite(String id, BuildContext context) async {
-  String? authToken = await getAuthToken();
-  try {
-    final response = await Dio().post('$addWishListUrl/$id',
-        options: Options(headers: {'Authorization': '$authToken'}));
-    String favResponseMessage = response.data['message'];
-    wishListShowSnackBar(context, favResponseMessage);
-  } catch (e) {
-    print('Error adding to wishlist $e');
+class WishListService {
+  Future<void> addFavorite(String id, BuildContext context) async {
+    String? authToken = await getAuthToken();
+    try {
+      final response = await Dio().post('$addWishListUrl/$id',
+          options: Options(headers: {'Authorization': '$authToken'}));
+      String favResponseMessage = response.data['message'];
+      if (context.mounted) {
+        wishListShowSnackBar(context, favResponseMessage);
+      }
+    } catch (e) {
+      debugPrint('Error adding to wishlist $e');
+    }
   }
-}
 
-Future<List<WishListModel>> getFavorite() async {
-  String? authToken = await getAuthToken();
-  try {
-    final response = await Dio().get(getWishListUrl,
-        options: Options(headers: {'Authorization': '$authToken'}));
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      List<WishListModel> wishListModel = (response.data['data'] as List)
-          .map((json) => WishListModel.fromJson(json))
-          .toList();
-      return wishListModel;
-    } else {
-      print('Failed to fetch wishlist');
+  Future<List<WishListModel>> getFavorite() async {
+    String? authToken = await getAuthToken();
+    try {
+      final response = await Dio().get(getWishListUrl,
+          options: Options(headers: {'Authorization': '$authToken'}));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        List<WishListModel> wishListModel = (response.data['data'] as List)
+            .map((json) => WishListModel.fromJson(json))
+            .toList();
+        return wishListModel;
+      } else {
+        return [];
+      }
+    } catch (e) {
       return [];
     }
-  } catch (e) {
-    print('Error Fetching Wishlist $e');
-    return [];
   }
-}
 
-Future<void> deleteFavorite(String id, BuildContext context) async {
-  String? authToken = await getAuthToken();
-  try {
-    final response = await Dio().delete('$deleteWishListUrl/$id',
-        options: Options(headers: {'Authorization': '$authToken'}));
-    final deleteFavMessage = response.data['message'];
-    print('DELETE FAV MESSAGE------$deleteFavMessage');
-    wishListShowSnackBar(context, deleteFavMessage);
-  } catch (e) {
-    print('Error deleting Wishlist $e');
+  Future<void> deleteFavorite(String id, BuildContext context) async {
+    String? authToken = await getAuthToken();
+    try {
+      final response = await Dio().delete('$deleteWishListUrl/$id',
+          options: Options(headers: {'Authorization': '$authToken'}));
+      final deleteFavMessage = response.data['message'];
+      if (context.mounted) {
+        wishListShowSnackBar(context, deleteFavMessage);
+      }
+    } catch (e) {
+      debugPrint('Error deleting Wishlist $e');
+    }
   }
 }
 

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kicks_cart/application/presentation/screens/loginscreen/loginscreen.dart';
+
 import 'package:kicks_cart/application/presentation/screens/onboardingscreens/onboarding_data.dart';
 import 'package:kicks_cart/application/presentation/screens/onboardingscreens/onboarding_page.dart';
 import 'package:kicks_cart/application/presentation/screens/onboardingscreens/widgets/onboarding_widgets.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen1 extends StatefulWidget {
   const OnboardingScreen1({super.key});
@@ -84,7 +83,7 @@ class _OnboardingScreen1State extends State<OnboardingScreen1> {
               ),
             ),
             kHeight30,
-            onboardingElevatedButton(
+            OnboardingElevatedButton(
                 currentIndex: currentIndex,
                 onboardingData: onboardingData,
                 pageController: _pageController),

@@ -8,7 +8,7 @@ class MyCartText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       children: [
         kWidth20,
         Text(
@@ -27,7 +27,7 @@ class QuantityText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       children: [
         kWidth10,
         Text(

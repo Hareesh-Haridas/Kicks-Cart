@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/retry.dart';
+
 import 'package:kicks_cart/Data/Service/products/config.dart';
 import 'package:kicks_cart/Domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
-import 'package:kicks_cart/Domain/models/cart/total_amount/total_amount_model.dart';
-import 'package:kicks_cart/application/business%20logic/cart/bloc/cart_bloc.dart';
-import 'package:kicks_cart/application/business%20logic/total_amount/bloc/bloc/total_amount_bloc.dart';
-import 'package:kicks_cart/application/presentation/screens/ProductDetailScreen/product_detail_screen.dart';
+
+import 'package:kicks_cart/application/business_logic/cart/bloc/cart_bloc.dart';
+import 'package:kicks_cart/application/business_logic/total_amount/bloc/bloc/total_amount_bloc.dart';
+import 'package:kicks_cart/application/presentation/screens/product_detail_screen/product_detail_screen.dart';
 import 'package:kicks_cart/application/presentation/screens/cart/widgets/bottom_appbar_widget.dart';
 import 'package:kicks_cart/application/presentation/screens/cart/widgets/quantity_widget.dart';
 import 'package:kicks_cart/application/presentation/screens/cart/widgets/text_widgets.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
+
+// import '../../../../domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -139,8 +141,8 @@ class _CartScreenState extends State<CartScreen> {
                                     ],
                                   ),
                                   kHeight10,
-                                  QuantityText(),
-                                  SizedBox(height: 5),
+                                  const QuantityText(),
+                                  const SizedBox(height: 5),
                                   QuantityController(
                                     stock: cart[index].stock,
                                     id: cart[index].id,
@@ -170,16 +172,16 @@ class _CartScreenState extends State<CartScreen> {
       bottomNavigationBar: BlocBuilder<TotalAmountBloc, TotalAmountState>(
         builder: (context, state) {
           if (state is LoadingAmountState) {
-            return const CircularProgressIndicator();
+            return const Center(child: Text('Loading...'));
           } else if (state is LoadedAmountState) {
             int totalAmountModel = state.amount;
             return Bottomappbar(
               totalAmount: totalAmountModel,
             );
           } else if (state is ErrorAmountState) {
-            return Text('Error Fetching Amount');
+            return const Text('Error Fetching Amount');
           } else {
-            return Text('Unknown Error');
+            return const Text('Unknown Error');
           }
         },
       ),

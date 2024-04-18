@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kicks_cart/Data/Service/auth/authorization_functions.dart';
-import 'package:kicks_cart/application/presentation/screens/HomeScreen/home_screen.dart';
-import 'package:kicks_cart/application/presentation/screens/Otp%20screen/otp_screen.dart';
+import 'package:kicks_cart/data/Service/auth/authorization_functions.dart';
+
 import 'package:kicks_cart/application/presentation/screens/accountcreationscreen/create_account_screen.dart';
-import 'package:kicks_cart/application/presentation/screens/loginscreen/loginscreen.dart';
+
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
@@ -198,6 +197,7 @@ class EMail extends StatelessWidget {
           if (value == null || value.isEmpty || !value.contains('@')) {
             return 'Please enter a valid Email';
           }
+          return null;
         },
       ),
     );
@@ -224,6 +224,7 @@ class PhoneNumber extends StatelessWidget {
           if (value == null || value.isEmpty || value.length != 10) {
             return 'Mobile Number must be of 10 digits';
           }
+          return null;
         },
       ),
     );
@@ -261,8 +262,6 @@ class PrivacyPolicyButton extends StatelessWidget {
   }
 }
 
-var signUpResponse;
-
 class SignInButton extends StatelessWidget {
   final GlobalKey<FormState> validatekey2;
   const SignInButton({
@@ -279,9 +278,9 @@ class SignInButton extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: MaterialButton(
             onPressed: () async {
-              print("BUTTON PRESSED");
               if (validatekey2.currentState!.validate()) {
-                await signUp(context);
+                AuthService authService = AuthService();
+                await authService.signUp(context);
               }
             },
             color: Colors.blueGrey[900],

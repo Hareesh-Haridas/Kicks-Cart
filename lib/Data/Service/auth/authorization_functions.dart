@@ -1,126 +1,136 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:kicks_cart/Data/Service/auth/config.dart';
-import 'package:kicks_cart/application/Widgets/bottomNavigationWidget/root_page.dart';
-import 'package:kicks_cart/application/presentation/screens/Otp%20screen/otp_screen.dart';
-import 'package:kicks_cart/application/presentation/screens/Otp%20screen/otp_success_screen.dart';
+import 'package:kicks_cart/data/Service/auth/config.dart';
+import 'package:kicks_cart/application/widgets/bottomNavigationWidget/root_page.dart';
+import 'package:kicks_cart/application/presentation/screens/otp_screen/otp_screen.dart';
+import 'package:kicks_cart/application/presentation/screens/otp_screen/otp_success_screen.dart';
 import 'package:kicks_cart/application/presentation/screens/accountcreationscreen/create_account_screen.dart';
 import 'package:kicks_cart/application/presentation/screens/loginscreen/loginscreen.dart';
 import 'package:http/http.dart' as http;
+import 'package:kicks_cart/data/service/auth/authorization_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String loginMessage = "";
-Future<void> loginUser(BuildContext context) async {
-  try {
-    if (lEmailController.text.isNotEmpty &&
-        lPasswordController.text.isNotEmpty) {
+class AuthService {
+  String loginMessage = "";
+  Future<void> loginUser(BuildContext context) async {
+    try {
+      if (lEmailController.text.isNotEmpty &&
+          lPasswordController.text.isNotEmpty) {
+        var regBody = {
+          "email": lEmailController.text,
+          "password": lPasswordController.text
+        };
+        var response = await http.post(Uri.parse(loginUrl),
+            headers: {"Content-Type": "application/json"},
+            body: jsonEncode(regBody));
+        if (response.statusCode == 200) {
+          var jsonResponse = jsonDecode(response.body);
+          bool statusMessage = jsonResponse['status'] ?? false;
+          loginMessage = jsonResponse['message'] ?? "";
+          if (statusMessage) {
+            var myToken = jsonResponse['token'] ?? "";
+            storeAuthToken(myToken);
+            prefs.setString('token', myToken);
+            if (context.mounted) {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const RootPage()));
+            }
+          } else {
+            if (context.mounted) {
+              showSnackBar(context, loginMessage);
+            }
+          }
+        } else {}
+      }
+    } catch (e) {
+      debugPrint("Exception during HTTP request: $e");
+    }
+  }
+
+  var otp = "";
+  String message = "";
+  Future<void> signUp(BuildContext context) async {
+    // print("sign up 1");
+
+    if (sEmailController.text.isNotEmpty &&
+        sPasswordController.text.isNotEmpty &&
+        sNameController.text.isNotEmpty &&
+        sPhoneNumberController.text.isNotEmpty) {
       var regBody = {
-        "email": lEmailController.text,
-        "password": lPasswordController.text
+        "firstname": sNameController.text,
+        "lastname": sLastNameController.text,
+        "email": sEmailController.text,
+        "password": sPasswordController.text,
+        "mobile": sPhoneNumberController.text,
       };
-      var response = await http.post(Uri.parse(loginUrl),
+
+      var response = await http.post(Uri.parse(resgistrationUrl),
           headers: {"Content-Type": "application/json"},
           body: jsonEncode(regBody));
-      if (response.statusCode == 200) {
-        var jsonResponse = jsonDecode(response.body);
-        bool statusMessage = jsonResponse['status'] ?? false;
-        print(statusMessage);
-        loginMessage = jsonResponse['message'] ?? "";
-        if (statusMessage) {
-          var myToken = jsonResponse['token'] ?? "";
-          storeAuthToken(myToken);
-          prefs.setString('token', myToken);
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const RootPage()));
-        } else {
-          showSnackBar(context, loginMessage);
-        }
+      // signUpResponse = response.body;
+      var jsonResponse = jsonDecode(response.body);
+      print(jsonResponse);
+      message = jsonResponse['message'] ?? "";
+
+      otp = jsonResponse['otp'] ?? "";
+      print('OTP==$otp');
+      if (otp.isNotEmpty && context.mounted) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OtpScreen(
+                      otp: otp,
+                    )));
       } else {
-        print(response.statusCode);
+        if (context.mounted) {
+          showSnackBar(context, message);
+        }
+      }
+    } else {}
+  }
+
+  String otpMessage = "";
+  Future<void> otpVerify(BuildContext context, String otp) async {
+    print('OTP in OtP verify $otp');
+    if (otpController1.text.isNotEmpty &&
+        otpController2.text.isNotEmpty &&
+        otpController3.text.isNotEmpty &&
+        otpController4.text.isNotEmpty) {
+      String pin =
+          "${otpController1.text}${otpController2.text}${otpController3.text}${otpController4.text}";
+      // String data =
+      //     "${sNameController.text}${sLastNameController.text}${sEmailController.text}${sPhoneNumberController.text}${sPasswordController.text}";
+
+      var regBody = {
+        "otp": pin,
+        "oldotp": otp,
+        "firstname": sNameController.text,
+        "lastname": sLastNameController.text,
+        "email": sEmailController.text,
+        "password": sPasswordController.text,
+        "mobile": sPhoneNumberController.text,
+      };
+      print(regBody);
+      var response = await http.post(
+        Uri.parse(verifyUrl),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(regBody),
+      );
+
+      var jsonResponse = jsonDecode(response.body);
+      otpMessage = jsonResponse['message'] ?? "";
+      if (otpMessage.isNotEmpty && context.mounted) {
+        showSnackBar(context, otpMessage);
+      } else {
+        if (context.mounted) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const OptSuccessScreen()));
+        }
       }
     }
-  } catch (e) {
-    print("Exception during HTTP request: $e");
-  }
-}
-
-String otp = "";
-String message = "";
-Future<void> signUp(BuildContext context) async {
-  // print("sign up 1");
-
-  if (sEmailController.text.isNotEmpty &&
-      sPasswordController.text.isNotEmpty &&
-      sNameController.text.isNotEmpty &&
-      sPhoneNumberController.text.isNotEmpty) {
-    var regBody = {
-      "firstname": sNameController.text,
-      "lastname": sLastNameController.text,
-      "email": sEmailController.text,
-      "password": sPasswordController.text,
-      "mobile": sPhoneNumberController.text,
-    };
-
-    var response = await http.post(Uri.parse(resgistrationUrl),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(regBody));
-    // signUpResponse = response.body;
-    var jsonResponse = jsonDecode(response.body);
-    // print(jsonResponse);
-    message = jsonResponse['message'] ?? "";
-
-    var data = jsonResponse['data'];
-    otp = jsonResponse['otp'] ?? "";
-    if (otp.isNotEmpty) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => OtpScreen()));
-    } else {
-      showSnackBar(context, message);
-    }
-    print(otp);
-    print(data);
-    print(message);
-  } else {
-    print("sign up 4");
-  }
-}
-
-String otpMessage = "";
-Future<void> otpVerify(BuildContext context) async {
-  if (otpController1.text.isNotEmpty &&
-      otpController2.text.isNotEmpty &&
-      otpController3.text.isNotEmpty &&
-      otpController4.text.isNotEmpty) {
-    String pin =
-        "${otpController1.text}${otpController2.text}${otpController3.text}${otpController4.text}";
-    // String data =
-    //     "${sNameController.text}${sLastNameController.text}${sEmailController.text}${sPhoneNumberController.text}${sPasswordController.text}";
-
-    var regBody = {
-      "otp": pin,
-      "oldotp": otp,
-      "firstname": sNameController.text,
-      "lastname": sLastNameController.text,
-      "email": sEmailController.text,
-      "password": sPasswordController.text,
-      "mobile": sPhoneNumberController.text,
-    };
-    var response = await http.post(
-      Uri.parse(verifyUrl),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(regBody),
-    );
-
-    var jsonResponse = jsonDecode(response.body);
-    otpMessage = jsonResponse['message'] ?? "";
-    if (otpMessage.isNotEmpty) {
-      showSnackBar(context, otpMessage);
-    } else {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => OptSuccessScreen()));
-    }
-    print(jsonResponse);
   }
 }
 
@@ -143,8 +153,10 @@ Future<void> clearAuthToken() async {
 
 Future<void> logOut(BuildContext context) async {
   await clearAuthToken();
-  Navigator.pushReplacement(
-      context, MaterialPageRoute(builder: (context) => LoginScreen()));
+  if (context.mounted) {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+  }
 }
 
 Future<void> clearSession() async {

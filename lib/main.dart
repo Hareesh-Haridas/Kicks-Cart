@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kicks_cart/Data/Service/auth/authorization_functions.dart';
-import 'package:kicks_cart/application/Widgets/bottomNavigationWidget/root_page.dart';
-import 'package:kicks_cart/application/business%20logic/address/bloc/bloc/address_bloc.dart';
-import 'package:kicks_cart/application/business%20logic/bottomNav/bloc/bottom_navigation_bloc.dart';
-import 'package:kicks_cart/application/business%20logic/cart/bloc/cart_bloc.dart';
-import 'package:kicks_cart/application/business%20logic/category/bloc/bloc/category_bloc.dart';
-import 'package:kicks_cart/application/business%20logic/product/bloc/bloc/product_bloc.dart';
-import 'package:kicks_cart/application/business%20logic/total_amount/bloc/bloc/total_amount_bloc.dart';
-import 'package:kicks_cart/application/business%20logic/wishlist/bloc/bloc/wish_list_bloc.dart';
+import 'package:kicks_cart/data/Service/auth/authorization_functions.dart';
+import 'package:kicks_cart/application/widgets/bottomNavigationWidget/root_page.dart';
+import 'package:kicks_cart/application/business_logic/address/bloc/bloc/address_bloc.dart';
+import 'package:kicks_cart/application/business_logic/bottom_nav/bloc/bottom_navigation_bloc.dart';
+import 'package:kicks_cart/application/business_logic/cart/bloc/cart_bloc.dart';
+import 'package:kicks_cart/application/business_logic/category/bloc/bloc/category_bloc.dart';
+import 'package:kicks_cart/application/business_logic/orders/bloc/bloc/order_bloc.dart';
+import 'package:kicks_cart/application/business_logic/product/bloc/bloc/product_bloc.dart';
+import 'package:kicks_cart/application/business_logic/total_amount/bloc/bloc/total_amount_bloc.dart';
+import 'package:kicks_cart/application/business_logic/wishlist/bloc/bloc/wish_list_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/loginscreen/loginscreen.dart';
-import 'package:kicks_cart/application/presentation/screens/onboardingscreens/onboardingscreen_1.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -32,7 +32,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<CartBloc>(create: (context) => CartBloc()),
         BlocProvider<WishListBloc>(create: (context) => WishListBloc()),
         BlocProvider<AddressBloc>(create: (context) => AddressBloc()),
-        BlocProvider<TotalAmountBloc>(create: (context) => TotalAmountBloc())
+        BlocProvider<TotalAmountBloc>(create: (context) => TotalAmountBloc()),
+        BlocProvider<OrderBloc>(create: (context) => OrderBloc())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

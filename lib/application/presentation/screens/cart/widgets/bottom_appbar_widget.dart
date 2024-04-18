@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kicks_cart/Domain/models/cart/total_amount/total_amount_model.dart';
-import 'package:kicks_cart/application/business%20logic/cart/bloc/cart_bloc.dart';
-import 'package:kicks_cart/application/presentation/screens/checkoutScreen/checkout_screen.dart';
+
+import 'package:kicks_cart/application/business_logic/cart/bloc/cart_bloc.dart';
+import 'package:kicks_cart/application/presentation/screens/checkout_screen/checkout_screen.dart';
 
 class Bottomappbar extends StatefulWidget {
   final int totalAmount;
@@ -45,7 +45,6 @@ class _BottomappbarState extends State<Bottomappbar> {
 
   @override
   Widget build(BuildContext context) {
-    print('TOTAL AMOUNT-------${widget.totalAmount}');
     return showBottomAppbar
         ? BottomAppBar(
             child: Container(
