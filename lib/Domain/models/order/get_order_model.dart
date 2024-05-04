@@ -8,6 +8,10 @@ class GetOrderModel {
   final String status;
   final String size;
   final int quantity;
+  final String addressName;
+  final int phoneNumber;
+  final String cityName;
+  final String deliveryDate;
   GetOrderModel(
       {required this.images,
       required this.name,
@@ -17,8 +21,18 @@ class GetOrderModel {
       required this.brand,
       required this.status,
       required this.size,
-      required this.quantity});
-  factory GetOrderModel.fromJson(Map<String, dynamic> json, String orderId) {
+      required this.quantity,
+      required this.addressName,
+      required this.cityName,
+      required this.phoneNumber,
+      required this.deliveryDate});
+  factory GetOrderModel.fromJson(
+      Map<String, dynamic> json,
+      String orderId,
+      String orderStatus,
+      String addressName,
+      int phoneNumber,
+      String cityName) {
     return GetOrderModel(
         images: json['image'] != null ? List<String>.from(json['image']) : [],
         name: json['name'] ?? '',
@@ -26,8 +40,12 @@ class GetOrderModel {
         id: orderId,
         description: json['description'] ?? '',
         brand: json['category'] ?? '',
-        status: json['status'] ?? '',
+        status: orderStatus,
         size: json['size'] ?? '',
-        quantity: json['quantity'] ?? 0);
+        quantity: json['quantity'] ?? 0,
+        addressName: addressName,
+        phoneNumber: phoneNumber,
+        cityName: cityName,
+        deliveryDate: json['deliveryDate'] ?? '');
   }
 }

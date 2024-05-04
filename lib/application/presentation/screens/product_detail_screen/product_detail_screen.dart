@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kicks_cart/Data/Service/products/config.dart';
-import 'package:kicks_cart/Data/Service/products/product_functions.dart';
-import 'package:kicks_cart/Domain/models/product/getProductModel/get_product_model.dart';
+// import 'package:kicks_cart/Data/Service/products/config.dart';
+// import 'package:kicks_cart/Data/Service/products/product_functions.dart';
+// import 'package:kicks_cart/Domain/models/product/getProductModel/get_product_model.dart';
 import 'package:kicks_cart/application/presentation/screens/product_detail_screen/widgets/add_to_cart_but_now_widget.dart';
 import 'package:kicks_cart/application/presentation/screens/product_detail_screen/widgets/buy_now_button.dart';
 import 'package:kicks_cart/application/presentation/screens/product_detail_screen/widgets/divider_widget.dart';
@@ -11,6 +11,9 @@ import 'package:kicks_cart/application/presentation/screens/product_detail_scree
 import 'package:kicks_cart/application/presentation/screens/product_detail_screen/widgets/stock_indicator_wishlist_button.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
+import 'package:kicks_cart/data/service/products/config.dart';
+import 'package:kicks_cart/data/service/products/product_functions.dart';
+import 'package:kicks_cart/domain/models/product/getProductModel/get_product_model.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final String productId;
@@ -96,7 +99,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         id: productModel.id,
                       ),
                       kHeight10,
-                      const BuyNowButton(),
+                      BuyNowButton(
+                        stock: productModel.stock,
+                        image: '$productUrl/${productModel.productImage[0]}',
+                        name: productModel.productName,
+                        totalPrice: productModel.productPrice,
+                        id: productModel.id,
+                      ),
                       kHeight10,
                     ],
                   ),

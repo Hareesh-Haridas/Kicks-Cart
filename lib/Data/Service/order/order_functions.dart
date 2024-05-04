@@ -33,12 +33,39 @@ class OrderService {
     }
   }
 
+  Future<void> placeSingleProductOrder(String addressId, String productId,
+      String paymentMethod, BuildContext context, String size) async {
+    String? authToken = await getAuthToken();
+    var regBody = {
+      'productId': productId,
+      'size': size,
+      'addressId': addressId,
+      'paymentMethod': paymentMethod
+    };
+    try {
+      final response = await Dio().post(placeSingleProductUrl,
+          data: regBody,
+          options: Options(headers: {'Authorization': '$authToken'}));
+      bool status = response.data['status'] ?? false;
+      String orderPlacedMessage = response.data['message'] ?? '';
+      if (status) {
+        if (context.mounted) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const OrderPlacedScreen()));
+          placeOrderShowSnackBar(context, orderPlacedMessage);
+        }
+      }
+    } catch (e) {
+      debugPrint('Error: $e');
+    }
+  }
+
   Future<List<GetOrderModel>> getOrders() async {
     String? authToken = await getAuthToken();
     try {
       final response = await Dio().get(getOrderUrl,
           options: Options(headers: {'Authorization': '$authToken'}));
-      // print(response.data['data']);
+      // print(response.data);
 
       List<dynamic> responseData = response.data['data'];
 
@@ -46,12 +73,13 @@ class OrderService {
 
       for (var data in responseData) {
         var id = data["_id"] ?? '';
-
+        String orderStatus = data['curentStatus'] ?? '';
         if (data.containsKey('products') && data['products'] is List) {
           List<dynamic> productData = data['products'];
 
           for (var product in productData) {
-            GetOrderModel orderModel = GetOrderModel.fromJson(product, id);
+            GetOrderModel orderModel =
+                GetOrderModel.fromJson(product, id, orderStatus, '', 0, '');
             results.add(orderModel);
           }
         }
@@ -69,16 +97,37 @@ class OrderService {
     try {
       final response = await Dio().get('$getOrderDetailUrl/$id',
           options: Options(headers: {'Authorization': '$authToken'}));
-      print(response.data);
 
+      var ind = response.data['data'].length - 1;
+
+      String addressName = response.data['data'][ind]['name'] ?? '';
+      int phoneNumber = response.data['data'][ind]['phoneNumber'] ?? 0;
+      String cityName = response.data['data'][ind]['cityName'];
+      // print(response.data['address']);
+      String orderStatus = response.data['curentStatus'] ?? '';
       List<GetOrderModel> orders = (response.data['data'] as List)
-          .map((json) => GetOrderModel.fromJson(json, id))
+          .map((json) => GetOrderModel.fromJson(
+              json, id, orderStatus, addressName, phoneNumber, cityName))
           .toList();
       return orders;
     } catch (e) {
       debugPrint('Error Fetching orders $e');
       return [];
     }
+  }
+}
+
+Future<void> cancelOrder(String id, BuildContext context) async {
+  String? authToken = await getAuthToken();
+  try {
+    final response = await Dio().post('$cancelOrderUrl/$id',
+        options: Options(headers: {'Authorization': '$authToken'}));
+    String cancelMessage = response.data['message'];
+    if (context.mounted) {
+      placeOrderShowSnackBar(context, cancelMessage);
+    }
+  } catch (e) {
+    debugPrint('Error cancelling orders $e');
   }
 }
 

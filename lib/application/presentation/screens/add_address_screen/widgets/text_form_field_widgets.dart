@@ -26,6 +26,7 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
       children: [
         kHeight30,
         TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: addressNameController,
           decoration: const InputDecoration(
               border: OutlineInputBorder(),
@@ -40,6 +41,7 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
         ),
         kHeight10,
         TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           keyboardType: TextInputType.number,
           controller: addressPhoneNumberController,
           decoration: const InputDecoration(
@@ -57,6 +59,7 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
         ),
         kHeight10,
         TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: streetController,
           decoration: const InputDecoration(
               border: OutlineInputBorder(),
@@ -71,6 +74,7 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
         ),
         kHeight10,
         TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           keyboardType: TextInputType.number,
           controller: postalCodeController,
           decoration: const InputDecoration(
@@ -86,6 +90,7 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
         ),
         kHeight10,
         TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: cityController,
           decoration: const InputDecoration(
               border: OutlineInputBorder(),
@@ -100,6 +105,7 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
         ),
         kHeight10,
         TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: countryController,
           decoration: const InputDecoration(
               border: OutlineInputBorder(),

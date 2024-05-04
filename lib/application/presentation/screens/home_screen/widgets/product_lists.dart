@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kicks_cart/Data/Service/favorites/favorites_functions.dart';
-import 'package:kicks_cart/Data/Service/products/config.dart';
-import 'package:kicks_cart/Domain/models/product/product_model.dart';
-import 'package:kicks_cart/Domain/models/wishlist/get_wishlist_model.dart';
+// import 'package:kicks_cart/Data/Service/favorites/favorites_functions.dart';
+// import 'package:kicks_cart/Data/Service/products/config.dart';
+// import 'package:kicks_cart/Domain/models/product/product_model.dart';
+// import 'package:kicks_cart/Domain/models/wishlist/get_wishlist_model.dart';
 import 'package:kicks_cart/application/business_logic/product/bloc/bloc/product_bloc.dart';
 import 'package:kicks_cart/application/business_logic/wishlist/bloc/bloc/wish_list_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/product_detail_screen/product_detail_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
+import 'package:kicks_cart/data/service/favorites/favorites_functions.dart';
+import 'package:kicks_cart/data/service/products/config.dart';
+import 'package:kicks_cart/domain/models/product/product_model.dart';
+import 'package:kicks_cart/domain/models/wishlist/get_wishlist_model.dart';
 
 class ProductLists extends StatefulWidget {
   final BuildContext context;
@@ -25,7 +29,8 @@ late String productId;
 List<String> homeProductId = [];
 
 class _ProductListsState extends State<ProductLists> {
-  Set<String> wishlistIds = <String>{};
+  late Future<void> _initialization;
+  Set<String> wishlistIds = {};
   WishListService wishListService = WishListService();
   late WishListBloc wishListBloc;
   bool wish = false;
@@ -39,15 +44,32 @@ class _ProductListsState extends State<ProductLists> {
     super.initState();
     wishListBloc = context.read<WishListBloc>();
     wishListBloc.add(FetchwishListEvent());
+    // getWishlistIds();
+    _initialization = initializeWishlistIds();
+  }
+
+  Future<void> initializeWishlistIds() async {
+    List<WishListModel> wishList = await wishListService.getFavorite();
+    setState(() {
+      wishlistIds = wishList.map((item) => item.id).toSet();
+    });
   }
 
   Future<void> updateWishlistStatus(String productId) async {
-    bool isProductInWishlist = await isFavorite(productId);
-    if (isProductInWishlist) {
-      wishlistIds.add(productId);
-    } else {
-      wishlistIds.remove(productId);
-    }
+    setState(() {
+      if (wishlistIds.contains(productId)) {
+        wishlistIds.remove(productId);
+      } else {
+        wishlistIds.add(productId);
+      }
+    });
+  }
+
+  void getWishlistIds() async {
+    List<WishListModel> wishList = await wishListService.getFavorite();
+    setState(() {
+      wishlistIds = wishList.map((item) => item.id).toSet();
+    });
   }
 
   @override
@@ -101,93 +123,81 @@ class _ProductListsState extends State<ProductLists> {
                               spreadRadius: 2.0,
                             ),
                             const BoxShadow(
-                                color: kWhite,
-                                offset: Offset(0.0, 0.0),
-                                blurRadius: 0.0,
-                                spreadRadius: 0.0)
+                              color: kWhite,
+                              offset: Offset(0.0, 0.0),
+                              blurRadius: 0.0,
+                              spreadRadius: 0.0,
+                            )
                           ],
                         ),
-                        child: BlocBuilder<WishListBloc, WishListState>(
-                          builder: (context, state) {
-                            if (state is LoadingWishListState) {
-                              return CircularProgressIndicator();
-                            } else if (state is LoadedWishListState) {
-                              List<WishListModel> wishListModel =
-                                  state.wishList;
-                              return Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      IconButton(
-                                          onPressed: () async {
-                                            await updateWishlistStatus(
-                                                products[index].id);
-                                            if (wishlistIds
-                                                .contains(products[index].id)) {
-                                              await wishListService
-                                                  .deleteFavorite(
-                                                      products[index].id,
-                                                      widget.context)
-                                                  .whenComplete(() => context
-                                                      .read<WishListBloc>()
-                                                      .add(
-                                                          FetchwishListEvent()));
-                                            } else {
-                                              await wishListService
-                                                  .addFavorite(
-                                                      products[index].id,
-                                                      widget.context)
-                                                  .whenComplete(() => context
-                                                      .read<WishListBloc>()
-                                                      .add(
-                                                          FetchwishListEvent()));
-                                            }
-                                          },
-                                          icon: wishlistIds
-                                                  .contains(products[index].id)
-                                              ? const Icon(
-                                                  Icons.favorite_border)
-                                              : Icon(
-                                                  Icons.favorite,
-                                                  color: kRed,
-                                                ))
-                                    ],
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  onPressed: () async {
+                                    if (wishlistIds
+                                        .contains(products[index].id)) {
+                                      await wishListService
+                                          .deleteFavorite(products[index].id,
+                                              widget.context)
+                                          .whenComplete(() => (context)
+                                              .read<WishListBloc>()
+                                              .add(FetchwishListEvent()));
+                                      setState(() {
+                                        wishlistIds.remove(products[index].id);
+                                      });
+                                    } else {
+                                      await wishListService
+                                          .addFavorite(products[index].id,
+                                              widget.context)
+                                          .whenComplete(() => (context)
+                                              .read<WishListBloc>()
+                                              .add(FetchwishListEvent()));
+                                      setState(() {
+                                        wishlistIds.add(products[index].id);
+                                      });
+                                    }
+                                  },
+                                  icon: Icon(
+                                    wishlistIds.contains(products[index].id)
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color:
+                                        wishlistIds.contains(products[index].id)
+                                            ? kRed
+                                            : null,
                                   ),
-                                  kHeight10,
-                                  Image.network(
-                                    imageUrl,
-                                    fit: BoxFit.cover,
-                                    height: 90,
-                                    width: 150,
+                                )
+                              ],
+                            ),
+                            kHeight10,
+                            Image.network(
+                              imageUrl,
+                              fit: BoxFit.cover,
+                              height: 90,
+                              width: 150,
+                            ),
+                            Text(
+                              products[index].productName,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w300, fontSize: 15),
+                            ),
+                            kHeight10,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                kWidth10,
+                                Text(
+                                  '₹${products[index].productPrice.toString()}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  Text(
-                                    products[index].productName,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 15),
-                                  ),
-                                  kHeight10,
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      kWidth10,
-                                      Text(
-                                        '₹${products[index].productPrice.toString()}',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              );
-                            } else if (state is ErrorWishListState) {
-                              return const Text('Error');
-                            } else {
-                              return const Text('Unknown error');
-                            }
-                          },
+                                ),
+                              ],
+                            )
+                          ],
                         ),
                       ),
                     ),

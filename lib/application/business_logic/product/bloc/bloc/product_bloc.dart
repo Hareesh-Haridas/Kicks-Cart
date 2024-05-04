@@ -7,13 +7,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
-import 'package:kicks_cart/Data/Service/products/product_functions.dart';
+// import 'package:kicks_cart/Data/Service/products/product_functions.dart';
 
 
-import 'package:kicks_cart/Domain/models/product/getProductModel/get_product_model.dart';
+// import 'package:kicks_cart/Domain/models/product/getProductModel/get_product_model.dart';
 
 
-import 'package:kicks_cart/Domain/models/product/product_model.dart';
+// import 'package:kicks_cart/Domain/models/product/product_model.dart';
+
+
+import 'package:kicks_cart/data/service/products/product_functions.dart';
+
+
+import 'package:kicks_cart/domain/models/product/getProductModel/get_product_model.dart';
+
+import 'package:kicks_cart/domain/models/product/product_model.dart';
 
 
 // import 'package:meta/meta.dart';

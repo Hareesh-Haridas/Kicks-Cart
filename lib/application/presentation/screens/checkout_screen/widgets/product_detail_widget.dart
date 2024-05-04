@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kicks_cart/Data/Service/products/config.dart';
-import 'package:kicks_cart/Domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
+// import 'package:kicks_cart/Data/Service/products/config.dart';
+// import 'package:kicks_cart/Domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
 import 'package:kicks_cart/application/business_logic/cart/bloc/cart_bloc.dart';
+import 'package:kicks_cart/data/service/products/config.dart';
+import 'package:kicks_cart/domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
 
 class ProductDetailWidget extends StatelessWidget {
   const ProductDetailWidget({

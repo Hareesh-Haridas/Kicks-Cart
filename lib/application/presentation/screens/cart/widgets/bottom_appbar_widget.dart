@@ -1,14 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:kicks_cart/application/business_logic/cart/bloc/cart_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/checkout_screen/checkout_screen.dart';
 
 class Bottomappbar extends StatefulWidget {
+  final bool showTotalPrice;
   final int totalAmount;
   const Bottomappbar({
     super.key,
     required this.totalAmount,
+    required this.showTotalPrice,
   });
 
   @override
@@ -16,36 +19,9 @@ class Bottomappbar extends StatefulWidget {
 }
 
 class _BottomappbarState extends State<Bottomappbar> {
-  bool showBottomAppbar = false;
-  @override
-  void initState() {
-    super.initState();
-    final cartBloc = context.read<CartBloc>();
-    cartBloc.stream.listen((state) {
-      if (state is LoadedCartState) {
-        setState(() {
-          showBottomAppbar = state.cart.isNotEmpty;
-        });
-      }
-    });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final cartBloc = context.read<CartBloc>();
-    cartBloc.stream.listen((state) {
-      if (state is LoadedCartState) {
-        setState(() {
-          showBottomAppbar = state.cart.isNotEmpty;
-        });
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return showBottomAppbar
+    return widget.showTotalPrice
         ? BottomAppBar(
             child: Container(
               height: 50,
@@ -70,3 +46,41 @@ class _BottomappbarState extends State<Bottomappbar> {
         : const SizedBox.shrink();
   }
 }
+ // bool showBottomAppbar = false;
+  // late StreamSubscription cartSubscription;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   final cartBloc = context.read<CartBloc>();
+
+  //   cartSubscription = cartBloc.stream.listen((state) {
+  //     if (state is LoadingCartState) {
+  //       setState(() {
+  //         showBottomAppbar = false;
+  //       });
+  //     } else if (state is LoadedCartState) {
+  //       setState(() {
+  //         showBottomAppbar = state.cart.isNotEmpty;
+  //       });
+  //     }
+  //   });
+  // }
+
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   cartSubscription.cancel();
+  // }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   final cartBloc = context.read<CartBloc>();
+  //   cartBloc.stream.listen((state) {
+  //     if (state is LoadedCartState) {
+  //       setState(() {
+  //         showBottomAppbar = state.cart.isNotEmpty;
+  //       });
+  //     }
+  //   });
+  // }

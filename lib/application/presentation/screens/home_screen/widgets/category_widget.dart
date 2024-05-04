@@ -36,7 +36,9 @@ class CategoryWidget extends StatelessWidget {
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => CategoryDetailScreen(
-                                      name: categories[index].name)));
+                                        name: categories[index].name,
+                                        id: categories[index].id,
+                                      )));
                             },
                             child: Container(
                               width: 60,

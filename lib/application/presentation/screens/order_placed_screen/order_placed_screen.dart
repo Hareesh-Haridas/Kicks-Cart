@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kicks_cart/application/presentation/screens/home_screen/home_screen.dart';
+import 'package:kicks_cart/application/presentation/screens/my_orders_screen/my_orders_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 import 'package:lottie/lottie.dart';
@@ -41,7 +43,12 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
               height: 200,
             ),
             MaterialButton(
-              onPressed: () {},
+              onPressed: () {
+                // Navigator.of(context).pushAndRemoveUntil(
+                //     MaterialPageRoute(builder: (context) => const HomeScreen()),
+                //     (route) => false);
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              },
               color: Colors.green,
               textColor: kWhite,
               shape: RoundedRectangleBorder(

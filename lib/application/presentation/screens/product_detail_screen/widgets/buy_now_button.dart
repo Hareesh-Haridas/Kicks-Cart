@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:kicks_cart/application/presentation/screens/checkout_screen/checkout_screen.dart';
+import 'package:kicks_cart/application/presentation/screens/indivual_product_checkout_screen/individual_product_checkout_screen.dart';
+import 'package:kicks_cart/application/presentation/screens/product_detail_screen/widgets/filter_chip.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
-class BuyNowButton extends StatelessWidget {
+class BuyNowButton extends StatefulWidget {
+  final int stock;
+  final dynamic image;
+  final String name;
+  final int totalPrice;
+  final String id;
   const BuyNowButton({
     super.key,
+    required this.image,
+    required this.name,
+    required this.totalPrice,
+    required this.id,
+    required this.stock,
   });
 
+  @override
+  State<BuyNowButton> createState() => _BuyNowButtonState();
+}
+
+class _BuyNowButtonState extends State<BuyNowButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,7 +32,28 @@ class BuyNowButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           MaterialButton(
-            onPressed: () {},
+            onPressed: () {
+              if (widget.stock < 1) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Sorry.Product is Out of Stock',
+                      style: TextStyle(color: kWhite),
+                    ),
+                    backgroundColor: kRed,
+                  ),
+                );
+              } else {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => IndividualProductCheckoutScreen(
+                          totalPrice: widget.totalPrice,
+                          image: widget.image,
+                          name: widget.name,
+                          id: widget.id,
+                          selectedSize: selectedSize,
+                        )));
+              }
+            },
             color: Colors.green,
             textColor: kWhite,
             shape:

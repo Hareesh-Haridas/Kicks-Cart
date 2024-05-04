@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:kicks_cart/data/Service/auth/authorization_functions.dart';
 import 'package:kicks_cart/data/Service/products/config.dart';
-import 'package:kicks_cart/Domain/models/product/getProductModel/get_product_model.dart';
-import 'package:kicks_cart/Domain/models/product/product_model.dart';
+// import 'package:kicks_cart/Domain/models/product/getProductModel/get_product_model.dart';
+// import 'package:kicks_cart/Domain/models/product/product_model.dart';
+import 'package:kicks_cart/domain/models/product/getProductModel/get_product_model.dart';
+import 'package:kicks_cart/domain/models/product/product_model.dart';
 
 class ProductService {
   Future<List<ProductModel>> getProducts() async {

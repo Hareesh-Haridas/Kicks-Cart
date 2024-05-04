@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
-import 'package:kicks_cart/Data/Service/cart/cart_functions.dart';
+import 'package:kicks_cart/data/service/cart/cart_functions.dart';
+
+
+// import 'package:kicks_cart/Data/Service/cart/cart_functions.dart';
 
 
 // import 'package:meta/meta.dart';
@@ -24,6 +27,8 @@ class TotalAmountBloc extends Bloc<TotalAmountEvent, TotalAmountState> {
   TotalAmountBloc() : super(LoadingAmountState()) {
 
     on<FetchAmountEvent>((event, emit) async {
+      print('total amount bloc called');
+
 
       try {
 

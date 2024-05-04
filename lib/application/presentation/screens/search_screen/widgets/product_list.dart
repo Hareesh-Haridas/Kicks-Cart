@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kicks_cart/Data/Service/favorites/favorites_functions.dart';
+// import 'package:kicks_cart/Data/Service/favorites/favorites_functions.dart';
 
-import 'package:kicks_cart/Data/Service/products/config.dart';
-import 'package:kicks_cart/Domain/models/product/getProductModel/get_product_model.dart';
-import 'package:kicks_cart/Domain/models/product/product_model.dart';
+// import 'package:kicks_cart/Data/Service/products/config.dart';
+// import 'package:kicks_cart/Domain/models/product/getProductModel/get_product_model.dart';
+// import 'package:kicks_cart/Domain/models/product/product_model.dart';
 import 'package:kicks_cart/application/business_logic/product/bloc/bloc/product_bloc.dart';
 import 'package:kicks_cart/application/business_logic/wishlist/bloc/bloc/wish_list_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/product_detail_screen/product_detail_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
+import 'package:kicks_cart/data/service/favorites/favorites_functions.dart';
+import 'package:kicks_cart/data/service/products/config.dart';
+import 'package:kicks_cart/domain/models/product/getProductModel/get_product_model.dart';
+import 'package:kicks_cart/domain/models/product/product_model.dart';
+import 'package:kicks_cart/domain/models/wishlist/get_wishlist_model.dart';
 
 class SearchProductLists extends StatefulWidget {
   final BuildContext context;
@@ -26,7 +31,48 @@ late String productId;
 List<String> homeProductId = [];
 
 class _SearchProductListsState extends State<SearchProductLists> {
+  late Future<void> _initialization;
+  Set<String> wishlistIds = {};
   WishListService wishListService = WishListService();
+  Future<bool> isFavorite(String productId) async {
+    List<WishListModel> wishList = await wishListService.getFavorite();
+    return wishList.any((item) => item.id == productId);
+  }
+
+  Future<void> initializeWishlistIds() async {
+    List<WishListModel> wishList = await wishListService.getFavorite();
+    setState(() {
+      // Extract product IDs from the wishlist and store them in wishlistIds set
+      wishlistIds = wishList.map((item) => item.id).toSet();
+    });
+  }
+
+  Future<void> updateWishlistStatus(String productId) async {
+    setState(() {
+      if (wishlistIds.contains(productId)) {
+        wishlistIds
+            .remove(productId); // Remove product ID if it exists in the set
+      } else {
+        wishlistIds
+            .add(productId); // Add product ID if it doesn't exist in the set
+      }
+    });
+  }
+
+  void getWishlistIds() async {
+    List<WishListModel> wishList = await wishListService.getFavorite();
+    setState(() {
+      // Extract product IDs from the wishlist and store them in wishlistIds set
+      wishlistIds = wishList.map((item) => item.id).toSet();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initialization = initializeWishlistIds();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProductBloc, ProductState>(
@@ -91,15 +137,37 @@ class _SearchProductListsState extends State<SearchProductLists> {
                               children: [
                                 IconButton(
                                   onPressed: () async {
-                                    await wishListService
-                                        .addFavorite(
-                                            products[index].id, widget.context)
-                                        .whenComplete(() => context
-                                            .read<WishListBloc>()
-                                            .add(FetchwishListEvent()));
+                                    if (wishlistIds
+                                        .contains(products[index].id)) {
+                                      await wishListService
+                                          .deleteFavorite(products[index].id,
+                                              widget.context)
+                                          .whenComplete(() => (context)
+                                              .read<WishListBloc>()
+                                              .add(FetchwishListEvent()));
+                                      setState(() {
+                                        wishlistIds.remove(products[index].id);
+                                      });
+                                    } else {
+                                      await wishListService
+                                          .addFavorite(products[index].id,
+                                              widget.context)
+                                          .whenComplete(() => (context)
+                                              .read<WishListBloc>()
+                                              .add(FetchwishListEvent()));
+                                      setState(() {
+                                        wishlistIds.add(products[index].id);
+                                      });
+                                    }
                                   },
-                                  icon: const Icon(
-                                    Icons.favorite_outline,
+                                  icon: Icon(
+                                    wishlistIds.contains(products[index].id)
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color: // Change the color based on whether the product is in the wishlist or not
+                                        wishlistIds.contains(products[index].id)
+                                            ? kRed
+                                            : null,
                                   ),
                                 ),
                               ],

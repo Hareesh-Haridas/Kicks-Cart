@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:kicks_cart/Domain/models/address/get_address_model.dart';
 import 'package:kicks_cart/application/business_logic/cart/bloc/cart_bloc.dart';
+import 'package:kicks_cart/application/presentation/screens/checkout_screen/widgets/address_picker.dart';
 import 'package:kicks_cart/data/service/order/order_functions.dart';
-import 'package:kicks_cart/domain/models/address/get_address_model.dart';
 import 'package:kicks_cart/application/business_logic/address/bloc/bloc/address_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/change_address_screen/change_address_screen.dart';
 import 'package:kicks_cart/application/presentation/screens/checkout_screen/widgets/payment_method_dialog.dart';
@@ -21,6 +20,9 @@ class CheckoutScreen extends StatefulWidget {
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
 }
+
+typedef AddressPickedCallback = void Function(String selectedAddress);
+typedef AddressIdCallback = void Function(String id);
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   late Razorpay razorpay;
@@ -45,10 +47,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     }
   }
 
-  void handlePaymentSuccess(PaymentSuccessResponse response) {
+  void handlePaymentSuccess(PaymentSuccessResponse response) async {
     Fluttertoast.showToast(
         msg: "Payment Succesful${response.paymentId!}",
         toastLength: Toast.LENGTH_SHORT);
+    await placeTheOrder();
   }
 
   void handlePaymentError(PaymentFailureResponse response) {
@@ -63,6 +66,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     razorpay.clear();
   }
 
+  String selectedAddressId = '';
+  String selectedAddress = '';
   String paymentMethod = 'Cash on Delivery';
   OrderService orderService = OrderService();
   late AddressBloc addressBloc;
@@ -153,7 +158,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   'Subtotal',
                                   style: TextStyle(fontSize: 17),
                                 ),
-                                Text(widget.subTotal.toString())
+                                Text('₹ ${widget.subTotal.toString()}')
                               ],
                             ),
                             kHeight38,
@@ -178,7 +183,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  (widget.subTotal + 10).toString(),
+                                  ('₹${widget.subTotal + 10}').toString(),
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20),
@@ -225,25 +230,41 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text(
-                                  'Shipping Address',
+                                  'Choose Shipping Address',
                                   style: TextStyle(
                                       fontSize: 17,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 TextButton(
                                     onPressed: () async {
-                                      final newSelectedAddress = Navigator.of(
-                                              context)
-                                          .push<String>(MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const ChangeAddressScreen()));
-                                      setState(() {
-                                        selected =
-                                            newSelectedAddress.toString();
-                                      });
+                                      // final newSelectedAddress = Navigator.of(
+                                      //         context)
+                                      //     .push<String>(MaterialPageRoute(
+                                      //         builder: (context) =>
+                                      //             const ChangeAddressScreen()));
+                                      // setState(() {
+                                      //   selected =
+                                      //       newSelectedAddress.toString();
+                                      // });
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AddressPicker(
+                                              onAddressSelected: (selected) {
+                                                setState(() {
+                                                  selectedAddress = selected;
+                                                });
+                                              },
+                                              onAddressCallback: (selected) {
+                                                setState(() {
+                                                  selectedAddressId = selected;
+                                                });
+                                              },
+                                            );
+                                          });
                                     },
                                     child: const Text(
-                                      'Change',
+                                      'Choose',
                                       style: TextStyle(color: kGrey),
                                     ))
                               ],
@@ -253,78 +274,50 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  selected.isNotEmpty
-                                      ? name ?? ''
-                                      : address[0].name,
+                                  selectedAddress,
                                   style: const TextStyle(fontSize: 17),
                                 ),
                               ],
                             ),
-                            // kHeight30,
-                            Row(
-                              children: [
-                                const Icon(Icons.call),
-                                Text(
-                                  selected.isNotEmpty
-                                      ? phoneNumber.toString()
-                                      : address[0].phoneNumber.toString(),
-                                  style: const TextStyle(fontSize: 17),
-                                ),
-                              ],
-                            ),
-                            kHeight30,
-                            Row(
-                              children: [
-                                const Icon(Icons.location_on_outlined),
-                                Expanded(
-                                  child: Text(
-                                    selected.isNotEmpty
-                                        ? otherDetails ?? ''
-                                        : '${address[0].cityName},${address[0].streetName}',
-                                    style: const TextStyle(fontSize: 17),
-                                  ),
-                                ),
-                              ],
-                            ),
+
                             kHeight10,
                             loading
                                 ? const CircularProgressIndicator()
                                 : MaterialButton(
                                     onPressed: () async {
-                                      setState(() {
-                                        loading = true;
-                                      });
-                                      if (paymentMethod == 'Online Payment') {
-                                        openCheckout(widget.subTotal);
-                                        await orderService
-                                            .placeorder(selected, paymentMethod,
-                                                context)
-                                            .whenComplete(
-                                          () {
-                                            setState(
-                                              () {
-                                                loading = false;
-                                              },
-                                            );
-                                          },
-                                        ).whenComplete(() => context
-                                                .read<CartBloc>()
-                                                .add(FetchCartEvent()));
+                                      if (selectedAddress.isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'Please Select Shipping Address',
+                                              style: TextStyle(color: kWhite),
+                                            ),
+                                            backgroundColor: kRed,
+                                          ),
+                                        );
                                       } else {
-                                        await orderService
-                                            .placeorder(selected, paymentMethod,
-                                                context)
-                                            .whenComplete(
-                                          () {
-                                            setState(
-                                              () {
-                                                loading = false;
-                                              },
-                                            );
-                                          },
-                                        ).whenComplete(() => context
-                                                .read<CartBloc>()
-                                                .add(FetchCartEvent()));
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        if (paymentMethod == 'Online Payment') {
+                                          openCheckout(widget.subTotal);
+                                        } else {
+                                          await orderService
+                                              .placeorder(selectedAddressId,
+                                                  paymentMethod, context)
+                                              .whenComplete(
+                                            () {
+                                              setState(
+                                                () {
+                                                  loading = false;
+                                                },
+                                              );
+                                            },
+                                          ).whenComplete(() => context
+                                                  .read<CartBloc>()
+                                                  .add(FetchCartEvent()));
+                                        }
                                       }
                                     },
                                     color: Colors.green,
@@ -363,5 +356,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> placeTheOrder() async {
+    setState(() {
+      loading = true;
+    });
+    try {
+      await orderService.placeorder(selectedAddressId, paymentMethod, context);
+      setState(() {
+        loading = false;
+      });
+      // Fetch cart after successful order placement
+      context.read<CartBloc>().add(FetchCartEvent());
+    } catch (e) {
+      setState(() {
+        loading = false;
+      });
+      // Handle error if order placement fails
+    }
   }
 }

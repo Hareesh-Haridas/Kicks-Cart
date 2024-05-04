@@ -9,6 +9,7 @@ import 'package:kicks_cart/application/presentation/screens/home_screen/widgets/
 import 'package:kicks_cart/application/presentation/screens/home_screen/widgets/shopping_cart_button.dart';
 import 'package:kicks_cart/application/presentation/screens/home_screen/widgets/text_widgets.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
+import 'package:kicks_cart/data/service/auth/authorization_functions.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   LogOutButton()
                 ],
               ),
-              const WelcomeTextWidget(),
+              WelcomeTextWidget(),
               kHeight30,
               const Searchwidget(),
               kHeight30,

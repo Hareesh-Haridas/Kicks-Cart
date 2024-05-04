@@ -42,10 +42,7 @@ class _QuantityControllerState extends State<QuantityController> {
                     await cartService
                         .editQuantity(widget.stock - 1, widget.id, context)
                         .whenComplete(() =>
-                            context.read<CartBloc>().add(FetchCartEvent()))
-                        .whenComplete(() => context
-                            .read<TotalAmountBloc>()
-                            .add(FetchAmountEvent()));
+                            context.read<CartBloc>().add(FetchCartEvent()));
                   }
                 },
                 icon: const Icon(
@@ -78,10 +75,7 @@ class _QuantityControllerState extends State<QuantityController> {
                     await cartService
                         .editQuantity(widget.stock + 1, widget.id, context)
                         .whenComplete(() =>
-                            context.read<CartBloc>().add(FetchCartEvent()))
-                        .whenComplete(() => context
-                            .read<TotalAmountBloc>()
-                            .add(FetchAmountEvent()));
+                            context.read<CartBloc>().add(FetchCartEvent()));
                   },
                   icon: const Icon(
                     Icons.add,

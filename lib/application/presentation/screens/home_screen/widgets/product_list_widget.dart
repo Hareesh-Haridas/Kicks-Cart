@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kicks_cart/application/presentation/screens/home_screen/widgets/carousel_slider.dart';
 import 'package:kicks_cart/application/presentation/screens/home_screen/widgets/product_lists.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
@@ -31,14 +30,13 @@ class _ProductListWidgetState extends State<ProductListWidget> {
         child: Column(
           children: [
             kHeight10,
-            // const CarouselBanner(),
             kHeight10,
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     "Popular products",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,

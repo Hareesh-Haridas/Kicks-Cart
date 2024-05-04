@@ -2,8 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kicks_cart/data/Service/auth/authorization_functions.dart';
 import 'package:kicks_cart/data/Service/cart/config.dart';
-import 'package:kicks_cart/Domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
+// import 'package:kicks_cart/Domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
+import 'package:kicks_cart/domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
 
 class CartService {
   Future<void> addToCart(String id, BuildContext context, String size) async {
@@ -25,9 +26,11 @@ class CartService {
 
   Future<List<GetCartModel>> getCart() async {
     String? authToken = await getAuthToken();
+
+    final response = await Dio().get(getCartUrl,
+        options: Options(headers: {'Authorization': '$authToken'}));
+
     try {
-      final response = await Dio().get(getCartUrl,
-          options: Options(headers: {'Authorization': '$authToken'}));
       bool status = response.data['status'] ?? false;
       if (status) {
         List<GetCartModel> getCartModel = (response.data['datas'] as List)
@@ -54,9 +57,8 @@ class CartService {
           options: Options(headers: {'Authorization': '$authToken'}));
       bool status = response.data['status'] ?? false;
       String editQuantitymessage = response.data['message'] ?? '';
-      if (context.mounted) {
-        cartShowSnackBar(context, editQuantitymessage);
-      }
+
+      cartShowSnackBar(context, editQuantitymessage);
 
       if (status) {
         getCart();
@@ -71,6 +73,7 @@ class CartService {
     try {
       final response = await Dio().get(getCartUrl,
           options: Options(headers: {'Authorization': '$authToken'}));
+      print(response.data['totalPrice']);
       bool status = response.data['status'];
 
       if (status) {
@@ -88,12 +91,15 @@ class CartService {
   Future<void> deleteCart(String id, BuildContext context) async {
     String? authToken = await getAuthToken();
     try {
-      final response = await Dio().delete('$deleteCartUrl/$id',
-          options: Options(headers: {'Authorization': '$authToken'}));
+      final response = await Dio().delete(
+        '$deleteCartUrl/$id',
+        options: Options(
+          headers: {'Authorization': '$authToken'},
+        ),
+      );
       String deleteCartMessage = response.data['message'];
-      if (context.mounted) {
-        cartShowSnackBar(context, deleteCartMessage);
-      }
+
+      cartShowSnackBar(context, deleteCartMessage);
     } catch (e) {
       debugPrint('Error deleting category $e');
     }

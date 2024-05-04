@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
+import 'package:kicks_cart/data/service/auth/authorization_functions.dart';
 
 class GoodDayToShoppingText extends StatelessWidget {
   const GoodDayToShoppingText({
@@ -31,7 +32,7 @@ class WelcomeTextWidget extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 26),
           child: Text(
-            "Welcome Hareesh Haridas",
+            'Welcome',
             style: TextStyle(
               color: kWhite,
               fontWeight: FontWeight.bold,

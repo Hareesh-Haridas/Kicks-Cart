@@ -48,7 +48,7 @@ class _ProductPriceWidgetState extends State<ProductPriceWidget> {
         kWidth30,
         Text(
           '₹${widget.price.toString()}',
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
         )

@@ -6,6 +6,7 @@ import 'package:kicks_cart/application/business_logic/orders/bloc/bloc/order_blo
 import 'package:kicks_cart/application/presentation/screens/order_detail_screen/order_detail_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
+import 'package:kicks_cart/data/service/order/order_functions.dart';
 import 'package:kicks_cart/data/service/products/config.dart';
 import 'package:kicks_cart/domain/models/order/get_order_model.dart';
 
@@ -75,6 +76,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => OrderDetailScreen(
                                           id: orders[index].id,
+                                          index: index,
                                         ))),
                             child: Container(
                               height: 160,
@@ -138,19 +140,33 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                                   ),
                                                 ],
                                               ),
-                                              kHeight10,
-                                              const Row(
-                                                children: [
-                                                  Text('Delivery Date')
-                                                ],
-                                              ),
                                               Row(
                                                 children: [
                                                   TextButton(
-                                                      onPressed: () {},
-                                                      child: const Text(
-                                                        'Cancel',
-                                                        style: TextStyle(
+                                                      onPressed: () async {
+                                                        if (orders[index]
+                                                                .status ==
+                                                            'cancelled') {
+                                                          return;
+                                                        } else {
+                                                          await cancelOrder(
+                                                                  orders[index]
+                                                                      .id,
+                                                                  context)
+                                                              .whenComplete(
+                                                                  () => context
+                                                                      .read<
+                                                                          OrderBloc>()
+                                                                      .add(
+                                                                          FetchOrderEvent()));
+                                                        }
+                                                      },
+                                                      child: Text(
+                                                        orders[index].status ==
+                                                                'cancelled'
+                                                            ? 'Cancelled'
+                                                            : 'cancel',
+                                                        style: const TextStyle(
                                                             color: kRed),
                                                       ))
                                                 ],

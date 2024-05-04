@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kicks_cart/application/presentation/screens/home_screen/home_screen.dart';
+import 'package:kicks_cart/application/presentation/screens/my_orders_screen/my_orders_screen.dart';
+import 'package:kicks_cart/application/presentation/screens/onboardingscreens/onboardingscreen_1.dart';
 import 'package:kicks_cart/data/Service/auth/authorization_functions.dart';
 import 'package:kicks_cart/application/widgets/bottomNavigationWidget/root_page.dart';
 import 'package:kicks_cart/application/business_logic/address/bloc/bloc/address_bloc.dart';
@@ -13,14 +16,25 @@ import 'package:kicks_cart/application/business_logic/wishlist/bloc/bloc/wish_li
 import 'package:kicks_cart/application/presentation/screens/loginscreen/loginscreen.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  bool isFirstInstall = await checkFirstInstall();
+  runApp(MyApp(
+    isFirstInstall: isFirstInstall,
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  final bool isFirstInstall;
+  const MyApp({super.key, required this.isFirstInstall});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -33,7 +47,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<WishListBloc>(create: (context) => WishListBloc()),
         BlocProvider<AddressBloc>(create: (context) => AddressBloc()),
         BlocProvider<TotalAmountBloc>(create: (context) => TotalAmountBloc()),
-        BlocProvider<OrderBloc>(create: (context) => OrderBloc())
+        BlocProvider<OrderBloc>(create: (context) => OrderBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -54,6 +68,8 @@ class MyApp extends StatelessWidget {
                 //     : const LoginScreen();
                 if (snapshot.data != null) {
                   return const RootPage();
+                } else if (widget.isFirstInstall) {
+                  return OnboardingScreen1();
                 } else {
                   return const LoginScreen();
                 }
@@ -72,3 +88,9 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// Future<bool> checkIsFirstTime(bool value) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   bool value = prefs.getBool("firstTime") ?? true;
+//   return value;
+// }

@@ -2,8 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kicks_cart/data/Service/auth/authorization_functions.dart';
 import 'package:kicks_cart/data/Service/favorites/config.dart';
-import 'package:kicks_cart/Domain/models/wishlist/get_wishlist_model.dart';
+// import 'package:kicks_cart/Domain/models/wishlist/get_wishlist_model.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
+import 'package:kicks_cart/domain/models/wishlist/get_wishlist_model.dart';
 
 class WishListService {
   Future<void> addFavorite(String id, BuildContext context) async {

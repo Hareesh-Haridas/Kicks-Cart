@@ -1,28 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:kicks_cart/Data/Service/category/category_functions.dart';
-import 'package:kicks_cart/Data/Service/favorites/favorites_functions.dart';
-import 'package:kicks_cart/Data/Service/products/config.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kicks_cart/application/business_logic/wishlist/bloc/bloc/wish_list_bloc.dart';
+import 'package:kicks_cart/application/presentation/screens/product_detail_screen/product_detail_screen.dart';
+// import 'package:kicks_cart/Data/Service/category/category_functions.dart';
+// import 'package:kicks_cart/Data/Service/favorites/favorites_functions.dart';
+// import 'package:kicks_cart/Data/Service/products/config.dart';
 // import 'package:kicks_cart/Domain/models/categoryModel/category_detail_model.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
+import 'package:kicks_cart/data/service/category/category_functions.dart';
+import 'package:kicks_cart/data/service/favorites/favorites_functions.dart';
+import 'package:kicks_cart/data/service/products/config.dart';
 import 'package:kicks_cart/domain/models/category_model/category_detail_model.dart';
+import 'package:kicks_cart/domain/models/wishlist/get_wishlist_model.dart';
 
 class CategoryDetailScreen extends StatefulWidget {
   final String name;
-  const CategoryDetailScreen({super.key, required this.name});
+  final String id;
+  const CategoryDetailScreen({super.key, required this.name, required this.id});
 
   @override
   State<CategoryDetailScreen> createState() => _CategoryDetailScreenState();
 }
 
 class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
+  late Future<void> _initialization;
+  Set<String> wishlistIds = {};
   WishListService wishListService = WishListService();
   late Future<List<CategoryDetailModel>> categoryDetailFuture;
   CategoryService categoryService = CategoryService();
+  Future<bool> isFavorite(String productId) async {
+    List<WishListModel> wishList = await wishListService.getFavorite();
+    return wishList.any((item) => item.id == productId);
+  }
+
+  Future<void> initializeWishlistIds() async {
+    List<WishListModel> wishList = await wishListService.getFavorite();
+    setState(() {
+      // Extract product IDs from the wishlist and store them in wishlistIds set
+      wishlistIds = wishList.map((item) => item.id).toSet();
+    });
+  }
+
+  Future<void> updateWishlistStatus(String productId) async {
+    setState(() {
+      if (wishlistIds.contains(productId)) {
+        wishlistIds
+            .remove(productId); // Remove product ID if it exists in the set
+      } else {
+        wishlistIds
+            .add(productId); // Add product ID if it doesn't exist in the set
+      }
+    });
+  }
+
+  void getWishlistIds() async {
+    List<WishListModel> wishList = await wishListService.getFavorite();
+    setState(() {
+      // Extract product IDs from the wishlist and store them in wishlistIds set
+      wishlistIds = wishList.map((item) => item.id).toSet();
+    });
+  }
+
+  // late CategoryDetailBloc categoryDetailBloc =
+  //     CategoryDetailBloc(id: widget.id);
   @override
   void initState() {
     categoryDetailFuture = categoryService.getCategoryDetail(widget.name);
     super.initState();
+    _initialization = initializeWishlistIds();
+    // categoryDetailBloc = context.read<CategoryDetailBloc>();
+    // categoryDetailBloc.add(FetchCategoryDetailEvent());
   }
 
   @override
@@ -75,51 +123,87 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                           String imageUrl = '$productUrl/$imageFileName';
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(),
-                                  borderRadius: BorderRadius.circular(10)),
-                              height: 300,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      IconButton(
-                                        onPressed: () async {
-                                          await wishListService.addFavorite(
-                                              product.id, context);
-                                        },
-                                        icon: const Icon(
-                                          Icons.favorite_outline,
+                            child: GestureDetector(
+                              onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => ProductDetailScreen(
+                                          productId: product.id))),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(),
+                                    borderRadius: BorderRadius.circular(10)),
+                                height: 300,
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        IconButton(
+                                          onPressed: () async {
+                                            // await wishListService.addFavorite(
+                                            //     product.id, context);
+                                            if (wishlistIds
+                                                .contains(product.id)) {
+                                              await wishListService
+                                                  .deleteFavorite(
+                                                      product.id, context)
+                                                  .whenComplete(() => (context)
+                                                      .read<WishListBloc>()
+                                                      .add(
+                                                          FetchwishListEvent()));
+                                              setState(() {
+                                                wishlistIds.remove(product.id);
+                                              });
+                                            } else {
+                                              await wishListService
+                                                  .addFavorite(
+                                                      product.id, context)
+                                                  .whenComplete(() => (context)
+                                                      .read<WishListBloc>()
+                                                      .add(
+                                                          FetchwishListEvent()));
+                                              setState(() {
+                                                wishlistIds.add(product.id);
+                                              });
+                                            }
+                                          },
+                                          icon: Icon(
+                                            wishlistIds.contains(product.id)
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: // Change the color based on whether the product is in the wishlist or not
+                                                wishlistIds.contains(product.id)
+                                                    ? kRed
+                                                    : null,
+                                          ),
                                         ),
+                                      ],
+                                    ),
+                                    kHeight10,
+                                    Image.network(
+                                      imageUrl,
+                                      fit: BoxFit.cover,
+                                      height: 90,
+                                      width: 150,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        product.name,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 15),
                                       ),
-                                    ],
-                                  ),
-                                  kHeight10,
-                                  Image.network(
-                                    imageUrl,
-                                    fit: BoxFit.cover,
-                                    height: 90,
-                                    width: 150,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      product.name,
+                                    ),
+                                    kHeight10,
+                                    kWidth10,
+                                    Text(
+                                      '₹${product.price.toString()}',
                                       style: const TextStyle(
-                                          fontWeight: FontWeight.w300,
-                                          fontSize: 15),
-                                    ),
-                                  ),
-                                  kHeight10,
-                                  kWidth10,
-                                  Text(
-                                    '₹${product.price.toString()}',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ],
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           );
@@ -129,6 +213,95 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                   }
                 },
               )
+              // BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
+              //   builder: (context, state) {
+              //     if (state is LoadingCategoryDetailState) {
+              //       return Center(
+              //         child: CircularProgressIndicator(),
+              //       );
+              //     } else if (state is LoadedCategoryDetailState) {
+              //       List<CategoryDetailModel> categories = state.categories;
+
+              //       return Expanded(
+              //         child: GridView.builder(
+              //           physics: const AlwaysScrollableScrollPhysics(),
+              //           scrollDirection: Axis.vertical,
+              //           shrinkWrap: true,
+              //           itemCount: categories.length,
+              //           gridDelegate:
+              //               const SliverGridDelegateWithFixedCrossAxisCount(
+              //             crossAxisCount: 2,
+              //             childAspectRatio: 0.75,
+              //           ),
+              //           itemBuilder: (context, index) {
+              //             String imageFileName = categories[index].images[0];
+
+              //             String imageUrl = '$productUrl/$imageFileName';
+              //             return Padding(
+              //               padding: const EdgeInsets.all(8.0),
+              //               child: Container(
+              //                 decoration: BoxDecoration(
+              //                     border: Border.all(),
+              //                     borderRadius: BorderRadius.circular(10)),
+              //                 height: 300,
+              //                 child: Column(
+              //                   children: [
+              //                     Row(
+              //                       mainAxisAlignment: MainAxisAlignment.end,
+              //                       children: [
+              //                         IconButton(
+              //                           onPressed: () async {
+              //                             await wishListService.addFavorite(
+              //                                 categories[index].id, context);
+              //                           },
+              //                           icon: const Icon(
+              //                             Icons.favorite_outline,
+              //                           ),
+              //                         ),
+              //                       ],
+              //                     ),
+              //                     kHeight10,
+              //                     Image.network(
+              //                       imageUrl,
+              //                       fit: BoxFit.cover,
+              //                       height: 90,
+              //                       width: 150,
+              //                     ),
+              //                     Expanded(
+              //                       child: Text(
+              //                         categories[index].name,
+              //                         style: const TextStyle(
+              //                             fontWeight: FontWeight.w300,
+              //                             fontSize: 15),
+              //                       ),
+              //                     ),
+              //                     kHeight10,
+              //                     kWidth10,
+              //                     Text(
+              //                       '₹${categories[index].price.toString()}',
+              //                       style: const TextStyle(
+              //                         fontWeight: FontWeight.bold,
+              //                       ),
+              //                     )
+              //                   ],
+              //                 ),
+              //               ),
+              //             );
+              //           },
+              //         ),
+              //       );
+              //     } else if (state is ErrorCategoryDetailState) {
+              //       print('Entered bloc');
+              //       return Center(
+              //         child: Text(state.error),
+              //       );
+              //     } else {
+              //       return Center(
+              //         child: Text('Unknown Error'),
+              //       );
+              //     }
+              //   },
+              // )
             ],
           ),
         ),

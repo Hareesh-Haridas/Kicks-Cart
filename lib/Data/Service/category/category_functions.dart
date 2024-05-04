@@ -30,6 +30,7 @@ class CategoryService {
     try {
       final response = await Dio().get('$getCategoryDetailUrl/$id',
           options: Options(headers: {'Authorization': '$authToken'}));
+
       bool status = response.data['status'];
       if (status) {
         List<CategoryDetailModel> products = (response.data['data'] as List)

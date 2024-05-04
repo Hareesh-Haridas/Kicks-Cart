@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
+import 'package:kicks_cart/data/service/auth/authorization_functions.dart';
 
 class ProfileLogoutButton extends StatefulWidget {
   const ProfileLogoutButton({super.key});
@@ -12,7 +13,9 @@ class _LogoutButtonState extends State<ProfileLogoutButton> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {},
+      onTap: () async {
+        await logOut(context);
+      },
       title: const Text('Log out'),
       shape: RoundedRectangleBorder(
           side: const BorderSide(color: kGrey),

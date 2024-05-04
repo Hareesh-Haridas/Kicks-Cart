@@ -8,11 +8,11 @@ import 'package:kicks_cart/application/presentation/screens/otp_screen/otp_succe
 import 'package:kicks_cart/application/presentation/screens/accountcreationscreen/create_account_screen.dart';
 import 'package:kicks_cart/application/presentation/screens/loginscreen/loginscreen.dart';
 import 'package:http/http.dart' as http;
-import 'package:kicks_cart/data/service/auth/authorization_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   String loginMessage = "";
+
   Future<void> loginUser(BuildContext context) async {
     try {
       if (lEmailController.text.isNotEmpty &&
@@ -28,6 +28,7 @@ class AuthService {
           var jsonResponse = jsonDecode(response.body);
           bool statusMessage = jsonResponse['status'] ?? false;
           loginMessage = jsonResponse['message'] ?? "";
+
           if (statusMessage) {
             var myToken = jsonResponse['token'] ?? "";
             storeAuthToken(myToken);
@@ -70,11 +71,10 @@ class AuthService {
           body: jsonEncode(regBody));
       // signUpResponse = response.body;
       var jsonResponse = jsonDecode(response.body);
-      print(jsonResponse);
+
       message = jsonResponse['message'] ?? "";
 
       otp = jsonResponse['otp'] ?? "";
-      print('OTP==$otp');
       if (otp.isNotEmpty && context.mounted) {
         Navigator.push(
             context,
@@ -92,7 +92,6 @@ class AuthService {
 
   String otpMessage = "";
   Future<void> otpVerify(BuildContext context, String otp) async {
-    print('OTP in OtP verify $otp');
     if (otpController1.text.isNotEmpty &&
         otpController2.text.isNotEmpty &&
         otpController3.text.isNotEmpty &&
@@ -111,7 +110,6 @@ class AuthService {
         "password": sPasswordController.text,
         "mobile": sPhoneNumberController.text,
       };
-      print(regBody);
       var response = await http.post(
         Uri.parse(verifyUrl),
         headers: {"Content-Type": "application/json"},

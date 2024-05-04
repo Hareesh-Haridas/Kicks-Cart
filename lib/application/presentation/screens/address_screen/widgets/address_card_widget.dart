@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kicks_cart/data/Service/address/adress_functions.dart';
-import 'package:kicks_cart/Domain/models/address/get_address_model.dart';
+// import 'package:kicks_cart/Domain/models/address/get_address_model.dart';
 import 'package:kicks_cart/application/business_logic/address/bloc/bloc/address_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/edit_address_screen/edit_address_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
+import 'package:kicks_cart/domain/models/address/get_address_model.dart';
 
 class AddressCard extends StatefulWidget {
   const AddressCard({
