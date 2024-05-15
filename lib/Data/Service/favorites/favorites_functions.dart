@@ -26,6 +26,7 @@ class WishListService {
     try {
       final response = await Dio().get(getWishListUrl,
           options: Options(headers: {'Authorization': '$authToken'}));
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         List<WishListModel> wishListModel = (response.data['data'] as List)
             .map((json) => WishListModel.fromJson(json))

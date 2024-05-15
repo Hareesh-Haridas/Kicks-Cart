@@ -20,12 +20,12 @@ class OrderDetailScreen extends StatefulWidget {
 
 class _OrderDetailScreenState extends State<OrderDetailScreen> {
   OrderService orderService = OrderService();
-  late OrderBloc orderBloc;
+  // late OrderBloc orderBloc;
   @override
   void initState() {
     super.initState();
-    orderBloc = context.read<OrderBloc>();
-    orderBloc.add(FetchOrderEvent());
+    // orderBloc = context.read<OrderBloc>();
+    // orderBloc.add(FetchOrderEvent());
   }
 
   @override
@@ -50,21 +50,21 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   kWidth10,
-                  BlocBuilder<OrderBloc, OrderState>(
-                    builder: (context, state) {
-                      if (state is LoadingOrderState) {
-                        return const CircularProgressIndicator();
-                      } else if (state is LoadedOrderState) {
-                        List<GetOrderModel> orders = state.orders;
-                        return Text(
-                            'Current Status: ${orders[widget.index].status}');
-                      } else if (state is ErrorOrderState) {
-                        return const Text('Error');
-                      } else {
-                        return const Text('Unknown Error');
-                      }
-                    },
-                  )
+                  // BlocBuilder<OrderBloc, OrderState>(
+                  //   builder: (context, state) {
+                  //     if (state is LoadingOrderState) {
+                  //       return const CircularProgressIndicator();
+                  //     } else if (state is LoadedOrderState) {
+                  //       List<GetOrderModel> orders = state.orders;
+                  //       return Text(
+                  //           'Current Status: ${orders[widget.index].status}');
+                  //     } else if (state is ErrorOrderState) {
+                  //       return const Text('Error');
+                  //     } else {
+                  //       return const Text('Unknown Error');
+                  //     }
+                  //   },
+                  // )
                 ],
               ),
               kHeight30,

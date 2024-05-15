@@ -73,7 +73,7 @@ class CartService {
     try {
       final response = await Dio().get(getCartUrl,
           options: Options(headers: {'Authorization': '$authToken'}));
-      print(response.data['totalPrice']);
+
       bool status = response.data['status'];
 
       if (status) {

@@ -21,7 +21,7 @@ class _SearchScreenState extends State<SearchScreen> {
     super.initState();
     products = context.read<ProductBloc>();
     products.add(FetchProductsEvent());
-    products.add(SearchProductsEvent(query: ''));
+    // products.add(SearchProductsEvent(query: ''));
   }
 
   @override
@@ -29,7 +29,7 @@ class _SearchScreenState extends State<SearchScreen> {
     super.didChangeDependencies();
     products = context.read<ProductBloc>();
     products.add(FetchProductsEvent());
-    products.add(SearchProductsEvent(query: ''));
+    // products.add(SearchProductsEvent(query: ''));
   }
 
   @override

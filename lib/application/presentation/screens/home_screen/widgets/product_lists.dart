@@ -27,10 +27,11 @@ class ProductLists extends StatefulWidget {
 
 late String productId;
 List<String> homeProductId = [];
+Set<String> wishlistIds = {};
 
 class _ProductListsState extends State<ProductLists> {
   late Future<void> _initialization;
-  Set<String> wishlistIds = {};
+
   WishListService wishListService = WishListService();
   late WishListBloc wishListBloc;
   bool wish = false;

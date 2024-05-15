@@ -42,7 +42,6 @@ class _SearchProductListsState extends State<SearchProductLists> {
   Future<void> initializeWishlistIds() async {
     List<WishListModel> wishList = await wishListService.getFavorite();
     setState(() {
-      // Extract product IDs from the wishlist and store them in wishlistIds set
       wishlistIds = wishList.map((item) => item.id).toSet();
     });
   }
@@ -50,11 +49,9 @@ class _SearchProductListsState extends State<SearchProductLists> {
   Future<void> updateWishlistStatus(String productId) async {
     setState(() {
       if (wishlistIds.contains(productId)) {
-        wishlistIds
-            .remove(productId); // Remove product ID if it exists in the set
+        wishlistIds.remove(productId);
       } else {
-        wishlistIds
-            .add(productId); // Add product ID if it doesn't exist in the set
+        wishlistIds.add(productId);
       }
     });
   }
@@ -62,7 +59,6 @@ class _SearchProductListsState extends State<SearchProductLists> {
   void getWishlistIds() async {
     List<WishListModel> wishList = await wishListService.getFavorite();
     setState(() {
-      // Extract product IDs from the wishlist and store them in wishlistIds set
       wishlistIds = wishList.map((item) => item.id).toSet();
     });
   }
@@ -164,7 +160,7 @@ class _SearchProductListsState extends State<SearchProductLists> {
                                     wishlistIds.contains(products[index].id)
                                         ? Icons.favorite
                                         : Icons.favorite_border,
-                                    color: // Change the color based on whether the product is in the wishlist or not
+                                    color:
                                         wishlistIds.contains(products[index].id)
                                             ? kRed
                                             : null,
@@ -221,7 +217,7 @@ class _SearchProductListsState extends State<SearchProductLists> {
                 crossAxisCount: 2,
                 childAspectRatio: 0.75,
               ),
-              itemBuilder: (_, int index) {
+              itemBuilder: (context, int index) {
                 String imageFileName = searchResults[index].productImage[0];
 
                 String imageUrl = '$productUrl/$imageFileName';
@@ -284,14 +280,15 @@ class _SearchProductListsState extends State<SearchProductLists> {
                           Text(
                             searchResults[index].productName,
                             style: const TextStyle(
-                                fontWeight: FontWeight.w300, fontSize: 18),
+                                fontWeight: FontWeight.w300, fontSize: 15),
                           ),
                           kHeight10,
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               kWidth10,
                               Text(
-                                searchResults[index].productPrice.toString(),
+                                '₹${searchResults[index].productPrice.toString()}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),

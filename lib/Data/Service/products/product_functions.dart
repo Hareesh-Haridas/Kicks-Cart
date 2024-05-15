@@ -66,7 +66,7 @@ class ProductService {
     String? authToken = await getAuthToken();
     try {
       final response = await Dio().get('$searchProductUrl/$query',
-          options: Options(headers: {'Authorization': 'Bearer $authToken'}));
+          options: Options(headers: {'Authorization': '$authToken'}));
 
       bool status = response.data['status'];
       if (status) {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kicks_cart/data/Service/cart/cart_functions.dart';
 import 'package:kicks_cart/application/business_logic/cart/bloc/cart_bloc.dart';
-import 'package:kicks_cart/application/business_logic/total_amount/bloc/bloc/total_amount_bloc.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 

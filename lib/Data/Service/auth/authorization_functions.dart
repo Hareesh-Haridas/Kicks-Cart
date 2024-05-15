@@ -34,7 +34,7 @@ class AuthService {
             storeAuthToken(myToken);
             prefs.setString('token', myToken);
             if (context.mounted) {
-              Navigator.push(context,
+              Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => const RootPage()));
             }
           } else {

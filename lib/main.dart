@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kicks_cart/application/presentation/screens/home_screen/home_screen.dart';
-import 'package:kicks_cart/application/presentation/screens/my_orders_screen/my_orders_screen.dart';
+
 import 'package:kicks_cart/application/presentation/screens/onboardingscreens/onboardingscreen_1.dart';
 import 'package:kicks_cart/data/Service/auth/authorization_functions.dart';
 import 'package:kicks_cart/application/widgets/bottomNavigationWidget/root_page.dart';
@@ -16,7 +15,6 @@ import 'package:kicks_cart/application/business_logic/wishlist/bloc/bloc/wish_li
 import 'package:kicks_cart/application/presentation/screens/loginscreen/loginscreen.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,7 +67,7 @@ class _MyAppState extends State<MyApp> {
                 if (snapshot.data != null) {
                   return const RootPage();
                 } else if (widget.isFirstInstall) {
-                  return OnboardingScreen1();
+                  return const OnboardingScreen1();
                 } else {
                   return const LoginScreen();
                 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kicks_cart/application/business_logic/product/bloc/bloc/product_bloc.dart';
 
 // import 'package:kicks_cart/Data/Service/favorites/favorites_functions.dart';
 // import 'package:kicks_cart/Data/Service/products/config.dart';
 // import 'package:kicks_cart/Domain/models/wishlist/get_wishlist_model.dart';
 import 'package:kicks_cart/application/business_logic/wishlist/bloc/bloc/wish_list_bloc.dart';
+import 'package:kicks_cart/application/presentation/screens/home_screen/widgets/product_lists.dart';
 import 'package:kicks_cart/application/presentation/screens/product_detail_screen/product_detail_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/data/service/favorites/favorites_functions.dart';
@@ -104,6 +106,15 @@ class _FavoriteProductsState extends State<FavoriteProducts> {
                                                                 WishListBloc>()
                                                             .add(
                                                                 FetchwishListEvent()));
+                                                    setState(() {
+                                                      wishlistIds.remove(
+                                                          wishList[index].id);
+                                                      context
+                                                          .read<ProductBloc>()
+                                                          .add(
+                                                              FetchProductsEvent());
+                                                    });
+
                                                     if (context.mounted) {
                                                       Navigator.of(context)
                                                           .pop();

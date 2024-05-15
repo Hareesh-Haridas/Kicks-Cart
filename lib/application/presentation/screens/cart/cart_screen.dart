@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:kicks_cart/Domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
 
 import 'package:kicks_cart/application/business_logic/cart/bloc/cart_bloc.dart';
-import 'package:kicks_cart/application/business_logic/total_amount/bloc/bloc/total_amount_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/product_detail_screen/product_detail_screen.dart';
 import 'package:kicks_cart/application/presentation/screens/cart/widgets/bottom_appbar_widget.dart';
 import 'package:kicks_cart/application/presentation/screens/cart/widgets/quantity_widget.dart';
@@ -19,7 +18,7 @@ import 'package:kicks_cart/domain/models/cart/addCartModel/getCartModel/get_cart
 // import '../../../../domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
 
 class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
+  const CartScreen({super.key});
 
   @override
   State<CartScreen> createState() => _CartScreenState();

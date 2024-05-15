@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kicks_cart/application/presentation/screens/home_screen/home_screen.dart';
-import 'package:kicks_cart/application/presentation/screens/my_orders_screen/my_orders_screen.dart';
+
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 import 'package:lottie/lottie.dart';

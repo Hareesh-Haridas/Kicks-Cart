@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
-import 'package:kicks_cart/data/service/auth/authorization_functions.dart';
 
 class GoodDayToShoppingText extends StatelessWidget {
   const GoodDayToShoppingText({

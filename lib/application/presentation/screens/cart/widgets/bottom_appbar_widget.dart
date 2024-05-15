@@ -1,8 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kicks_cart/application/business_logic/cart/bloc/cart_bloc.dart';
 import 'package:kicks_cart/application/presentation/screens/checkout_screen/checkout_screen.dart';
 
 class Bottomappbar extends StatefulWidget {
@@ -29,7 +25,7 @@ class _BottomappbarState extends State<Bottomappbar> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Total Amount: ${widget.totalAmount}'),
+                  Text('Total Amount: ₹${widget.totalAmount}'),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(

@@ -27,8 +27,6 @@ class TotalAmountBloc extends Bloc<TotalAmountEvent, TotalAmountState> {
   TotalAmountBloc() : super(LoadingAmountState()) {
 
     on<FetchAmountEvent>((event, emit) async {
-      print('total amount bloc called');
-
 
       try {
 

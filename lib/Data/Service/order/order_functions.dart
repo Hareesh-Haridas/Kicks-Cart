@@ -61,6 +61,7 @@ class OrderService {
   }
 
   Future<List<GetOrderModel>> getOrders() async {
+    print('get order');
     String? authToken = await getAuthToken();
     try {
       final response = await Dio().get(getOrderUrl,
@@ -93,13 +94,14 @@ class OrderService {
   }
 
   Future<List<GetOrderModel>> getOrderDetails(String id) async {
+    print('get order detail');
     String? authToken = await getAuthToken();
     try {
       final response = await Dio().get('$getOrderDetailUrl/$id',
           options: Options(headers: {'Authorization': '$authToken'}));
 
       var ind = response.data['data'].length - 1;
-
+      print(response.data);
       String addressName = response.data['data'][ind]['name'] ?? '';
       int phoneNumber = response.data['data'][ind]['phoneNumber'] ?? 0;
       String cityName = response.data['data'][ind]['cityName'];

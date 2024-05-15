@@ -1,4 +1,3 @@
-import 'package:kicks_cart/data/Service/auth/config.dart';
-
+const baseUrl = 'https://flutter-backend-sym1.onrender.com';
 const getCategoryUrl = '$baseUrl/admin/getCategory';
 const getCategoryDetailUrl = '$baseUrl/getProducts';
