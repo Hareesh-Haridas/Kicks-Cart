@@ -100,20 +100,30 @@ class OrderService {
       final response = await Dio().get('$getOrderDetailUrl/$id',
           options: Options(headers: {'Authorization': '$authToken'}));
 
-      var ind = response.data['data'].length - 1;
-      print(response.data);
-      String addressName = response.data['data'][ind]['name'] ?? '';
-      int phoneNumber = response.data['data'][ind]['phoneNumber'] ?? 0;
-      String cityName = response.data['data'][ind]['cityName'];
-      // print(response.data['address']);
-      String orderStatus = response.data['curentStatus'] ?? '';
-      List<GetOrderModel> orders = (response.data['data'] as List)
-          .map((json) => GetOrderModel.fromJson(
-              json, id, orderStatus, addressName, phoneNumber, cityName))
-          .toList();
-      return orders;
+      var data = response.data['data'];
+      if (data is List && data.isNotEmpty) {
+        var ind = data.length - 1;
+        var orderDetails = data[0];
+        print(response.data);
+
+        // Access the last element of the list
+        String addressName = data[ind]['name'] ?? '';
+        int phoneNumber = data[ind]['phoneNumber'] ?? 0;
+        String cityName = data[ind]['cityName'] ?? '';
+        String orderStatus = orderDetails['status'] ?? '';
+
+        List<GetOrderModel> orders = data
+            .map<GetOrderModel>((json) => GetOrderModel.fromJson(
+                json, id, orderStatus, addressName, phoneNumber, cityName))
+            .toList();
+
+        return orders;
+      } else {
+        debugPrint('No orders found');
+        return [];
+      }
     } catch (e) {
-      debugPrint('Error Fetching orders $e');
+      debugPrint('Error Fetching orders: $e');
       return [];
     }
   }

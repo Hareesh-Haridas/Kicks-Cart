@@ -5,6 +5,7 @@ import 'package:kicks_cart/application/business_logic/category/bloc/bloc/categor
 import 'package:kicks_cart/application/presentation/screens/category_detail_screen/category_detail_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/domain/models/category_model/category_model.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class CategoryWidget extends StatelessWidget {
   const CategoryWidget({
@@ -48,12 +49,10 @@ class CategoryWidget extends StatelessWidget {
                                 color: kWhite,
                               ),
                               child: ClipOval(
-                                child: Image.network(
-                                  categories[index].image,
+                                child: FadeInImage.memoryNetwork(
+                                  placeholder: kTransparentImage,
+                                  image: categories[index].image,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const Text('No Image');
-                                  },
                                 ),
                               ),
                             ),

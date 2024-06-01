@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:kicks_cart/application/presentation/screens/add_address_screen/widgets/save_address_button.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
@@ -26,6 +27,11 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
       children: [
         kHeight30,
         TextFormField(
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.deny(RegExp(r'[!@#$%^&*(),.?":{}|<>]')),
+            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))
+          ],
+          textCapitalization: TextCapitalization.words,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: addressNameController,
           decoration: const InputDecoration(
@@ -35,12 +41,18 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please Enter Your Name';
+            } else if (value.length < 3) {
+              'Name should have atleast three letters';
             }
             return null;
           },
         ),
         kHeight10,
         TextFormField(
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(10)
+          ],
           autovalidateMode: AutovalidateMode.onUserInteraction,
           keyboardType: TextInputType.number,
           controller: addressPhoneNumberController,
@@ -59,6 +71,11 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
         ),
         kHeight10,
         TextFormField(
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.deny(RegExp(r'[!@#$%^&*(),.?":{}|<>]')),
+            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))
+          ],
+          textCapitalization: TextCapitalization.words,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: streetController,
           decoration: const InputDecoration(
@@ -68,12 +85,18 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please Enter Your Street Name';
+            } else if (value.length < 3) {
+              return 'Streat name should be at least three letters';
             }
             return null;
           },
         ),
         kHeight10,
         TextFormField(
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(6)
+          ],
           autovalidateMode: AutovalidateMode.onUserInteraction,
           keyboardType: TextInputType.number,
           controller: postalCodeController,
@@ -84,12 +107,19 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please Enter Your Postal Code';
+            } else if (value.length < 6) {
+              return 'Postal code must have 6 digits';
             }
             return null;
           },
         ),
         kHeight10,
         TextFormField(
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.deny(RegExp(r'[!@#$%^&*(),.?":{}|<>]')),
+            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))
+          ],
+          textCapitalization: TextCapitalization.words,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: cityController,
           decoration: const InputDecoration(
@@ -99,12 +129,19 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please Enter your City';
+            } else if (value.length < 3) {
+              return 'City name should have atleast three letters';
             }
             return null;
           },
         ),
         kHeight10,
         TextFormField(
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.deny(RegExp(r'[!@#$%^&*(),.?":{}|<>]')),
+            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))
+          ],
+          textCapitalization: TextCapitalization.words,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: countryController,
           decoration: const InputDecoration(
@@ -113,7 +150,9 @@ class _AddressTextFormFieldsState extends State<AddressTextFormFields> {
               prefixIcon: Icon(Icons.language_outlined)),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please Enter Your City Name';
+              return 'Please Enter Your Country Name';
+            } else if (value.length < 3) {
+              return 'Country name should have atleast 3 letters';
             }
             return null;
           },

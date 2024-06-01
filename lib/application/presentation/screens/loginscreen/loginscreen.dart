@@ -24,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     initSharedPref();
+    clearTextFields();
   }
 
   void initSharedPref() async {
@@ -52,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const EmailTextfield(),
                 kHeight20,
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: lPasswordController,
                   obscureText: !isPasswordVisible,
                   decoration: InputDecoration(
@@ -74,30 +76,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                      activeColor: Colors.blue,
-                      value: isChecked,
-                      onChanged: (bool? value) {
-                        setState(
-                          () {
-                            isChecked = value!;
-                          },
-                        );
-                      },
-                    ),
-                    const Text(
-                      "Remeber me",
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(
-                      width: 60,
-                    ),
-                    const ForgotPasswordButton()
-                  ],
-                ),
                 kHeight10,
                 SignInButton(formkey: formkey),
                 kHeight10,
@@ -109,5 +87,10 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void clearTextFields() {
+    lEmailController.clear();
+    lPasswordController.clear();
   }
 }

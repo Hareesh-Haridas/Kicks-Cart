@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kicks_cart/application/presentation/screens/profile_screen/widgets/about_button_widget.dart';
 import 'package:kicks_cart/application/presentation/screens/profile_screen/widgets/address_button_widget.dart';
 import 'package:kicks_cart/application/presentation/screens/profile_screen/widgets/logout_button_widget.dart';
 import 'package:kicks_cart/application/presentation/screens/profile_screen/widgets/orders_button_widget.dart';
@@ -25,7 +26,9 @@ class ProfileScreen extends StatelessWidget {
               kHeight10,
               OrdersButton(),
               kHeight10,
-              ProfileLogoutButton()
+              ProfileLogoutButton(),
+              kHeight10,
+              AboutButtonWidget()
             ],
           ),
         ),

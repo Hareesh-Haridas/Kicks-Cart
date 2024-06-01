@@ -20,6 +20,7 @@ TextEditingController otpController3 = TextEditingController();
 TextEditingController otpController4 = TextEditingController();
 
 class _OtpScreenState extends State<OtpScreen> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,13 +131,38 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
               ),
               kHeight38,
-              ElevatedButton(
-                onPressed: () async {
-                  AuthService authService = AuthService();
-                  await authService.otpVerify(context, widget.otp);
-                },
-                child: const Text('Submit'),
-              )
+              isLoading
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: () async {
+                        if (otpController1.text.isEmpty ||
+                            otpController2.text.isEmpty ||
+                            otpController3.text.isEmpty ||
+                            otpController4.text.isEmpty) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text(
+                              'Please fill the OTP',
+                              style: TextStyle(color: kWhite),
+                            ),
+                            backgroundColor: kRed,
+                          ));
+                        } else {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          AuthService authService = AuthService();
+                          await authService
+                              .otpVerify(context, widget.otp)
+                              .whenComplete(() {
+                            setState(() {
+                              isLoading = false;
+                            });
+                          });
+                        }
+                      },
+                      child: const Text('Submit'),
+                    )
             ],
           ),
         ),

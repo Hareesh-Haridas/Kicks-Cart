@@ -14,6 +14,7 @@ import 'package:kicks_cart/application/presentation/utils/constants.dart';
 import 'package:kicks_cart/data/service/cart/cart_functions.dart';
 import 'package:kicks_cart/data/service/products/config.dart';
 import 'package:kicks_cart/domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 // import '../../../../domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
 
@@ -48,26 +49,26 @@ class _CartScreenState extends State<CartScreen> {
               kHeight30,
               const MyCartText(),
               kHeight30,
-              BlocBuilder<CartBloc, CartState>(
-                builder: (context, state) {
-                  if (state is LoadingCartState) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  if (state is LoadedCartState) {
-                    List<GetCartModel> cart = state.cart;
-
-                    if (cart.isEmpty) {
+              Expanded(
+                child: BlocBuilder<CartBloc, CartState>(
+                  builder: (context, state) {
+                    if (state is LoadingCartState) {
                       return const Center(
-                        child: Text('Cart is Empty'),
+                        child: CircularProgressIndicator(),
                       );
-                    } else {
-                      totalPrice = state.totalPrice;
-                      bool showTotalPrice = totalPrice > 0;
-                      return Expanded(
-                        child: Column(
+                    }
+
+                    if (state is LoadedCartState) {
+                      List<GetCartModel> cart = state.cart;
+
+                      if (cart.isEmpty) {
+                        return const Center(
+                          child: Text('Cart is Empty'),
+                        );
+                      } else {
+                        totalPrice = state.totalPrice;
+                        bool showTotalPrice = totalPrice > 0;
+                        return Column(
                           children: [
                             Expanded(
                               child: ListView.builder(
@@ -105,8 +106,11 @@ class _CartScreenState extends State<CartScreen> {
                                                   decoration: BoxDecoration(
                                                       border: Border.all(
                                                           color: kGrey)),
-                                                  child: Image.network(
-                                                    imageUrl,
+                                                  child:
+                                                      FadeInImage.memoryNetwork(
+                                                    placeholder:
+                                                        kTransparentImage,
+                                                    image: imageUrl,
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
@@ -165,17 +169,17 @@ class _CartScreenState extends State<CartScreen> {
                               totalAmount: totalPrice,
                             ),
                           ],
-                        ),
+                        );
+                      }
+                    } else if (state is ErrorCartState) {
+                      return Center(
+                        child: Text('Error${state.error}'),
                       );
+                    } else {
+                      return const Center(child: Text('Unknown Error'));
                     }
-                  } else if (state is ErrorCartState) {
-                    return Center(
-                      child: Text('Error${state.error}'),
-                    );
-                  } else {
-                    return const Center(child: Text('Unknown Error'));
-                  }
-                },
+                  },
+                ),
               ),
             ],
           ),

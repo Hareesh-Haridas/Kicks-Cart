@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:kicks_cart/application/presentation/screens/loginscreen/loginscreen.dart';
 import 'package:kicks_cart/data/Service/auth/authorization_functions.dart';
 
 import 'package:kicks_cart/application/presentation/screens/accountcreationscreen/create_account_screen.dart';
 
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignInOptionText extends StatelessWidget {
   const SignInOptionText({
@@ -136,6 +139,12 @@ class FirstName extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: TextFormField(
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.deny(RegExp(r'[!@#$%^&*(),.?":{}|<>]')),
+          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))
+        ],
+        textCapitalization: TextCapitalization.words,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         controller: sNameController,
         decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -144,6 +153,8 @@ class FirstName extends StatelessWidget {
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please Enter your First Name';
+          } else if (value.length < 3) {
+            return 'Name should be at least three letters';
           }
           return null;
         },
@@ -162,6 +173,12 @@ class LastName extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: TextFormField(
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.deny(RegExp(r'[!@#$%^&*(),.?":{}|<>]')),
+          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))
+        ],
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        textCapitalization: TextCapitalization.words,
         controller: sLastNameController,
         decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -170,6 +187,8 @@ class LastName extends StatelessWidget {
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter your Last Name';
+          } else if (value.length < 3) {
+            'Name should be atleast three letters';
           }
           return null;
         },
@@ -194,7 +213,10 @@ class EMail extends StatelessWidget {
             labelText: "E-mail",
             prefixIcon: const Icon(Icons.mail_outline)),
         validator: (value) {
-          if (value == null || value.isEmpty || !value.contains('@')) {
+          if (value == null ||
+              value.isEmpty ||
+              !value.contains('@') ||
+              !value.contains('gmail.com')) {
             return 'Please enter a valid Email';
           }
           return null;
@@ -214,6 +236,10 @@ class PhoneNumber extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: TextFormField(
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(10)
+        ],
         keyboardType: TextInputType.number,
         controller: sPhoneNumberController,
         decoration: InputDecoration(
@@ -221,8 +247,10 @@ class PhoneNumber extends StatelessWidget {
             labelText: "Phone Number",
             prefixIcon: const Icon(Icons.call_outlined)),
         validator: (value) {
-          if (value == null || value.isEmpty || value.length != 10) {
-            return 'Mobile Number must be of 10 digits';
+          if (value == null || value.isEmpty) {
+            return 'Please enter your phone number';
+          } else if (value.length != 10) {
+            'Phone number should have 10 digits';
           }
           return null;
         },
@@ -253,7 +281,9 @@ class PrivacyPolicyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {},
+      onPressed: () async {
+        await launchInBrowser(Uri.parse(privacyPolicyUrl));
+      },
       child: const Text(
         "Privacy Policy",
         style: TextStyle(color: Colors.blue),
@@ -262,7 +292,9 @@ class PrivacyPolicyButton extends StatelessWidget {
   }
 }
 
-class SignInButton extends StatelessWidget {
+bool isLoading = false;
+
+class SignInButton extends StatefulWidget {
   final GlobalKey<FormState> validatekey2;
   const SignInButton({
     super.key,
@@ -270,35 +302,68 @@ class SignInButton extends StatelessWidget {
   });
 
   @override
+  State<SignInButton> createState() => _SignInButtonState();
+}
+
+class _SignInButtonState extends State<SignInButton> {
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: MaterialButton(
-            onPressed: () async {
-              if (validatekey2.currentState!.validate()) {
-                AuthService authService = AuthService();
-                await authService.signUp(context);
-              }
-            },
-            color: Colors.blueGrey[900],
-            textColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            height: 50,
-            minWidth: MediaQuery.of(context).size.width * 0.9,
-            child: const Text(
-              "Sign Up",
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-          ),
+          child: isLoading
+              ? const CircularProgressIndicator()
+              : MaterialButton(
+                  onPressed: () async {
+                    if (widget.validatekey2.currentState!.validate() &&
+                        isChecked) {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      AuthService authService = AuthService();
+                      await authService.signUp(context).whenComplete(() {
+                        setState(() {
+                          isLoading = false;
+                        });
+                      });
+                    } else if (!isChecked) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Please agree to privacy policy',
+                            style: TextStyle(color: kWhite),
+                          ),
+                          backgroundColor: kRed,
+                        ),
+                      );
+                    }
+                  },
+                  color: Colors.blueGrey[900],
+                  textColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  height: 50,
+                  minWidth: MediaQuery.of(context).size.width * 0.9,
+                  child: const Text(
+                    "Sign Up",
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
         ),
       ],
     );
+  }
+}
+
+String privacyPolicyUrl =
+    'https://www.termsfeed.com/live/7f639573-8314-417d-be0b-f69cd466218e';
+Future<void> launchInBrowser(Uri url) async {
+  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+    throw Exception('Could not lauch $url');
   }
 }

@@ -13,6 +13,7 @@ import 'package:kicks_cart/data/service/favorites/favorites_functions.dart';
 import 'package:kicks_cart/data/service/products/config.dart';
 import 'package:kicks_cart/domain/models/product/product_model.dart';
 import 'package:kicks_cart/domain/models/wishlist/get_wishlist_model.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ProductLists extends StatefulWidget {
   final BuildContext context;
@@ -81,6 +82,7 @@ class _ProductListsState extends State<ProductLists> {
           return const CircularProgressIndicator();
         } else if (state is LoadededProductState) {
           List<ProductModel>? products = state.products;
+
           if (products.isEmpty) {
             return const Text('No products Available');
           } else {
@@ -174,8 +176,9 @@ class _ProductListsState extends State<ProductLists> {
                               ],
                             ),
                             kHeight10,
-                            Image.network(
-                              imageUrl,
+                            FadeInImage.memoryNetwork(
+                              placeholder: kTransparentImage,
+                              image: imageUrl,
                               fit: BoxFit.cover,
                               height: 90,
                               width: 150,

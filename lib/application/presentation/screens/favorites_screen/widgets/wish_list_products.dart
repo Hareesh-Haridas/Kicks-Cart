@@ -12,6 +12,7 @@ import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/data/service/favorites/favorites_functions.dart';
 import 'package:kicks_cart/data/service/products/config.dart';
 import 'package:kicks_cart/domain/models/wishlist/get_wishlist_model.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class FavoriteProducts extends StatefulWidget {
   final BuildContext context;
@@ -64,8 +65,9 @@ class _FavoriteProductsState extends State<FavoriteProducts> {
                         ),
                         child: Column(
                           children: [
-                            Image.network(
-                              imageUrl,
+                            FadeInImage.memoryNetwork(
+                              placeholder: kTransparentImage,
+                              image: imageUrl,
                               fit: BoxFit.cover,
                               height: 90,
                               width: 150,

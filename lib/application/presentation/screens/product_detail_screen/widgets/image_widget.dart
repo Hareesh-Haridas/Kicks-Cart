@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ImageWidget extends StatefulWidget {
   final String image1;

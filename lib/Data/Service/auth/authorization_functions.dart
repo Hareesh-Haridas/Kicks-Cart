@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/data/Service/auth/config.dart';
 import 'package:kicks_cart/application/widgets/bottomNavigationWidget/root_page.dart';
 import 'package:kicks_cart/application/presentation/screens/otp_screen/otp_screen.dart';
@@ -118,11 +119,14 @@ class AuthService {
 
       var jsonResponse = jsonDecode(response.body);
       otpMessage = jsonResponse['message'] ?? "";
-      if (otpMessage.isNotEmpty && context.mounted) {
+      print(otpMessage);
+      if (otpMessage.isNotEmpty &&
+          context.mounted &&
+          otpMessage == 'Otp not match') {
         showSnackBar(context, otpMessage);
       } else {
         if (context.mounted) {
-          Navigator.push(
+          Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => const OptSuccessScreen()));
@@ -172,5 +176,11 @@ Future<bool> checkFirstInstall() async {
 }
 
 void showSnackBar(BuildContext context, String message) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(
+      message,
+      style: TextStyle(color: kWhite),
+    ),
+    backgroundColor: kRed,
+  ));
 }

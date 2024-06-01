@@ -20,17 +20,17 @@ class AddressCard extends StatefulWidget {
 class _AddressCardState extends State<AddressCard> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddressBloc, AddressState>(
-      builder: (context, state) {
-        if (state is LoadingAddressState) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is LoadedAddressState) {
-          List<GetAddressModel>? address = state.address;
-          if (address.isEmpty) {
-            return const Center(child: Text('No Addresses Available'));
-          } else {
-            return Expanded(
-              child: ListView.builder(
+    return Expanded(
+      child: BlocBuilder<AddressBloc, AddressState>(
+        builder: (context, state) {
+          if (state is LoadingAddressState) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is LoadedAddressState) {
+            List<GetAddressModel>? address = state.address;
+            if (address.isEmpty) {
+              return const Center(child: Text('No Addresses Available'));
+            } else {
+              return ListView.builder(
                   itemCount: address.length,
                   itemBuilder: (context, index) {
                     return Column(
@@ -159,15 +159,15 @@ class _AddressCardState extends State<AddressCard> {
                         kHeight10
                       ],
                     );
-                  }),
-            );
+                  });
+            }
+          } else if (state is ErrorAddressState) {
+            return Center(child: Text('Error ${state.error}'));
+          } else {
+            return const Center(child: Text('Unknown Error'));
           }
-        } else if (state is ErrorAddressState) {
-          return Center(child: Text('Error ${state.error}'));
-        } else {
-          return const Center(child: Text('Unknown Error'));
-        }
-      },
+        },
+      ),
     );
   }
 }

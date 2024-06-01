@@ -13,6 +13,7 @@ import 'package:kicks_cart/data/service/favorites/favorites_functions.dart';
 import 'package:kicks_cart/data/service/products/config.dart';
 import 'package:kicks_cart/domain/models/category_model/category_detail_model.dart';
 import 'package:kicks_cart/domain/models/wishlist/get_wishlist_model.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class CategoryDetailScreen extends StatefulWidget {
   final String name;
@@ -37,7 +38,6 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   Future<void> initializeWishlistIds() async {
     List<WishListModel> wishList = await wishListService.getFavorite();
     setState(() {
-      // Extract product IDs from the wishlist and store them in wishlistIds set
       wishlistIds = wishList.map((item) => item.id).toSet();
     });
   }
@@ -45,11 +45,9 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   Future<void> updateWishlistStatus(String productId) async {
     setState(() {
       if (wishlistIds.contains(productId)) {
-        wishlistIds
-            .remove(productId); // Remove product ID if it exists in the set
+        wishlistIds.remove(productId);
       } else {
-        wishlistIds
-            .add(productId); // Add product ID if it doesn't exist in the set
+        wishlistIds.add(productId);
       }
     });
   }
@@ -57,20 +55,15 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   void getWishlistIds() async {
     List<WishListModel> wishList = await wishListService.getFavorite();
     setState(() {
-      // Extract product IDs from the wishlist and store them in wishlistIds set
       wishlistIds = wishList.map((item) => item.id).toSet();
     });
   }
 
-  // late CategoryDetailBloc categoryDetailBloc =
-  //     CategoryDetailBloc(id: widget.id);
   @override
   void initState() {
     categoryDetailFuture = categoryService.getCategoryDetail(widget.name);
     super.initState();
     _initialization = initializeWishlistIds();
-    // categoryDetailBloc = context.read<CategoryDetailBloc>();
-    // categoryDetailBloc.add(FetchCategoryDetailEvent());
   }
 
   @override
@@ -94,19 +87,19 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                 ],
               ),
               kHeight38,
-              FutureBuilder(
-                future: categoryDetailFuture,
-                builder: (context,
-                    AsyncSnapshot<List<CategoryDetailModel>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text("No Products Available"));
-                  } else {
-                    return Expanded(
-                      child: GridView.builder(
+              Expanded(
+                child: FutureBuilder(
+                  future: categoryDetailFuture,
+                  builder: (context,
+                      AsyncSnapshot<List<CategoryDetailModel>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text("No Products Available"));
+                    } else {
+                      return GridView.builder(
                         physics: const AlwaysScrollableScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
@@ -171,7 +164,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                             wishlistIds.contains(product.id)
                                                 ? Icons.favorite
                                                 : Icons.favorite_border,
-                                            color: // Change the color based on whether the product is in the wishlist or not
+                                            color:
                                                 wishlistIds.contains(product.id)
                                                     ? kRed
                                                     : null,
@@ -180,8 +173,11 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                       ],
                                     ),
                                     kHeight10,
-                                    Image.network(
-                                      imageUrl,
+                                    FadeInImage.memoryNetwork(
+                                      fadeInDuration:
+                                          const Duration(milliseconds: 1000),
+                                      placeholder: kTransparentImage,
+                                      image: imageUrl,
                                       fit: BoxFit.cover,
                                       height: 90,
                                       width: 150,
@@ -208,10 +204,10 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                             ),
                           );
                         },
-                      ),
-                    );
-                  }
-                },
+                      );
+                    }
+                  },
+                ),
               )
               // BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
               //   builder: (context, state) {

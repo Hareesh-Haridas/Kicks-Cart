@@ -9,6 +9,7 @@ import 'package:kicks_cart/application/presentation/utils/constants.dart';
 import 'package:kicks_cart/data/service/order/order_functions.dart';
 import 'package:kicks_cart/data/service/products/config.dart';
 import 'package:kicks_cart/domain/models/order/get_order_model.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class MyOrdersScreen extends StatefulWidget {
   const MyOrdersScreen({super.key});
@@ -57,15 +58,15 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                 ],
               ),
               kHeight50,
-              BlocBuilder<OrderBloc, OrderState>(
-                builder: (context, state) {
-                  if (state is LoadingOrderState) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is LoadedOrderState) {
-                    List<GetOrderModel> orders = state.orders;
+              Expanded(
+                child: BlocBuilder<OrderBloc, OrderState>(
+                  builder: (context, state) {
+                    if (state is LoadingOrderState) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is LoadedOrderState) {
+                      List<GetOrderModel> orders = state.orders;
 
-                    return Expanded(
-                      child: ListView.separated(
+                      return ListView.separated(
                         separatorBuilder: (context, index) => kHeight10,
                         itemCount: orders.length,
                         itemBuilder: (context, index) {
@@ -109,8 +110,11 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                         SizedBox(
                                           height: 90,
                                           width: 90,
-                                          child: Image.network(
-                                            imageUrl,
+                                          child: FadeInImage.memoryNetwork(
+                                            fadeInDuration: const Duration(
+                                                milliseconds: 500),
+                                            placeholder: kTransparentImage,
+                                            image: imageUrl,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -182,14 +186,14 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                             ),
                           );
                         },
-                      ),
-                    );
-                  } else if (state is ErrorOrderState) {
-                    return const Center(child: Text('Error Fetching orders'));
-                  } else {
-                    return const Center(child: Text('Unknown Error occured'));
-                  }
-                },
+                      );
+                    } else if (state is ErrorOrderState) {
+                      return const Center(child: Text('Error Fetching orders'));
+                    } else {
+                      return const Center(child: Text('Unknown Error occured'));
+                    }
+                  },
+                ),
               )
             ],
           ),

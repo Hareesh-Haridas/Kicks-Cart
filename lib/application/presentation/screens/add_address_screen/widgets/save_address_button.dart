@@ -17,45 +17,57 @@ class SaveAddressButton extends StatefulWidget {
 }
 
 class _SaveAddressButtonState extends State<SaveAddressButton> {
+  bool saveAddressLoading = false;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: MaterialButton(
-            onPressed: () async {
-              if (addressFormKey.currentState!.validate()) {
-                await Future.delayed(const Duration(milliseconds: 50));
-                if (context.mounted) {
-                  AddressService addressService = AddressService();
-                  await addressService
-                      .addAddress(
-                          context,
-                          addressNameController.text,
-                          int.tryParse(addressPhoneNumberController.text) ?? 0,
-                          streetController.text,
-                          int.tryParse(postalCodeController.text) ?? 0,
-                          cityController.text,
-                          countryController.text)
-                      .whenComplete(() =>
-                          context.read<AddressBloc>().add(FetchAddressEvent()));
-                }
-              }
-            },
-            color: Colors.blueGrey[900],
-            textColor: kWhite,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            height: 50,
-            child: const Text(
-              "Save",
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-          ),
-        )
-      ],
-    );
+    return saveAddressLoading
+        ? const CircularProgressIndicator()
+        : Row(
+            children: [
+              Expanded(
+                child: MaterialButton(
+                  onPressed: () async {
+                    if (addressFormKey.currentState!.validate()) {
+                      setState(() {
+                        saveAddressLoading = true;
+                      });
+                      await Future.delayed(const Duration(milliseconds: 50));
+                      if (context.mounted) {
+                        AddressService addressService = AddressService();
+                        await addressService
+                            .addAddress(
+                                context,
+                                addressNameController.text,
+                                int.tryParse(
+                                        addressPhoneNumberController.text) ??
+                                    0,
+                                streetController.text,
+                                int.tryParse(postalCodeController.text) ?? 0,
+                                cityController.text,
+                                countryController.text)
+                            .whenComplete(() => context
+                                .read<AddressBloc>()
+                                .add(FetchAddressEvent()));
+                        setState(() {
+                          saveAddressLoading = false;
+                        });
+                      }
+                    }
+                  },
+                  color: Colors.blueGrey[900],
+                  textColor: kWhite,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  height: 50,
+                  child: const Text(
+                    "Save",
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          );
   }
 }
