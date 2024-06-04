@@ -121,7 +121,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                         kWidth10,
                                         SizedBox(
                                           height: 130,
-                                          width: 190,
+                                          width: 130,
                                           child: Column(
                                             children: [
                                               Row(
@@ -174,10 +174,24 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                                             color: kRed),
                                                       ))
                                                 ],
-                                              )
+                                              ),
                                             ],
                                           ),
-                                        )
+                                        ),
+                                        Container(
+                                            height: 30,
+                                            width: 70,
+                                            decoration: BoxDecoration(
+                                                color: kBlack,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Center(
+                                              child: Text(
+                                                orders[index].status,
+                                                style: const TextStyle(
+                                                    color: kWhite),
+                                              ),
+                                            ))
                                       ],
                                     )
                                   ],
