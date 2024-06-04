@@ -77,12 +77,13 @@ class _SearchProductListsState extends State<SearchProductLists> {
           return const CircularProgressIndicator();
         } else if (state is LoadededProductState) {
           List<ProductModel>? products = state.products;
+          products = products.where((product) => !product.blocked).toList();
           if (products.isEmpty) {
             return const Text('No products Available');
           } else {
             return Expanded(
               child: GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
+                physics: const ScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: products.length,
@@ -91,7 +92,7 @@ class _SearchProductListsState extends State<SearchProductLists> {
                   childAspectRatio: 0.75,
                 ),
                 itemBuilder: (_, int index) {
-                  for (int i = 0; i < products.length; i++) {
+                  for (int i = 0; i < products!.length; i++) {
                     homeProductId.add(products[index].id);
                   }
                   String imageFileName = products[index].productImage[0];
@@ -105,7 +106,7 @@ class _SearchProductListsState extends State<SearchProductLists> {
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => ProductDetailScreen(
-                                productId: products[index].id)));
+                                productId: products![index].id)));
                       },
                       child: Container(
                         height: 300,
@@ -134,7 +135,7 @@ class _SearchProductListsState extends State<SearchProductLists> {
                                 IconButton(
                                   onPressed: () async {
                                     if (wishlistIds
-                                        .contains(products[index].id)) {
+                                        .contains(products![index].id)) {
                                       await wishListService
                                           .deleteFavorite(products[index].id,
                                               widget.context)
@@ -142,7 +143,7 @@ class _SearchProductListsState extends State<SearchProductLists> {
                                               .read<WishListBloc>()
                                               .add(FetchwishListEvent()));
                                       setState(() {
-                                        wishlistIds.remove(products[index].id);
+                                        wishlistIds.remove(products![index].id);
                                       });
                                     } else {
                                       await wishListService
@@ -152,7 +153,7 @@ class _SearchProductListsState extends State<SearchProductLists> {
                                               .read<WishListBloc>()
                                               .add(FetchwishListEvent()));
                                       setState(() {
-                                        wishlistIds.add(products[index].id);
+                                        wishlistIds.add(products![index].id);
                                       });
                                     }
                                   },

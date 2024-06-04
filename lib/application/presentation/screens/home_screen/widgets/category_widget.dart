@@ -20,6 +20,8 @@ class CategoryWidget extends StatelessWidget {
           return const CircularProgressIndicator();
         } else if (state is LoadedCategoryState) {
           List<BrandModel>? categories = state.categories;
+          categories =
+              categories.where((categories) => !categories.blocked).toList();
           if (categories.isEmpty) {
             return const Text('No Categories Available');
           } else {
@@ -37,7 +39,7 @@ class CategoryWidget extends StatelessWidget {
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => CategoryDetailScreen(
-                                        name: categories[index].name,
+                                        name: categories![index].name,
                                         id: categories[index].id,
                                       )));
                             },
@@ -51,7 +53,7 @@ class CategoryWidget extends StatelessWidget {
                               child: ClipOval(
                                 child: FadeInImage.memoryNetwork(
                                   placeholder: kTransparentImage,
-                                  image: categories[index].image,
+                                  image: categories![index].image,
                                   fit: BoxFit.cover,
                                 ),
                               ),

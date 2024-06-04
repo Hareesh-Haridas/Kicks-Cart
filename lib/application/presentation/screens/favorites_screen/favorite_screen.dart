@@ -41,8 +41,10 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               kHeight30,
               const HeadingWidget(),
               kHeight30,
-              FavoriteProducts(
-                context: context,
+              Expanded(
+                child: FavoriteProducts(
+                  context: context,
+                ),
               )
             ],
           ),

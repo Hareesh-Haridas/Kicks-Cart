@@ -66,7 +66,7 @@ class OrderService {
     try {
       final response = await Dio().get(getOrderUrl,
           options: Options(headers: {'Authorization': '$authToken'}));
-      // print(response.data);
+      print(response.data);
 
       List<dynamic> responseData = response.data['data'];
 

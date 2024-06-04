@@ -3,13 +3,15 @@ import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 
 class SizeSelector extends StatefulWidget {
-  const SizeSelector({super.key});
+  const SizeSelector({
+    super.key,
+  });
 
   @override
   State<SizeSelector> createState() => _SizeSelectorState();
 }
 
-String selectedSize = 'small';
+String selectedSize = '';
 
 class _SizeSelectorState extends State<SizeSelector> {
   @override

@@ -12,7 +12,6 @@ class ProductService {
     try {
       final response = await Dio().get(getProductUrl,
           options: Options(headers: {'Authorization': '$authToken'}));
-
       if (response.statusCode == 200 || response.statusCode == 201) {
         List<ProductModel> products = (response.data['data'] as List)
             .map((json) => ProductModel.fromJson(json))
@@ -40,17 +39,6 @@ class ProductService {
         return getProductModel;
       } else {
         return GetProductModel(
-            productImage: [],
-            productName: "",
-            productPrice: 0,
-            productDescription: "",
-            stock: 0,
-            category: "",
-            message: '',
-            id: '');
-      }
-    } catch (e) {
-      return GetProductModel(
           productImage: [],
           productName: "",
           productPrice: 0,
@@ -58,7 +46,20 @@ class ProductService {
           stock: 0,
           category: "",
           message: '',
-          id: '');
+          id: '',
+        );
+      }
+    } catch (e) {
+      return GetProductModel(
+        productImage: [],
+        productName: "",
+        productPrice: 0,
+        productDescription: "",
+        stock: 0,
+        category: "",
+        message: '',
+        id: '',
+      );
     }
   }
 

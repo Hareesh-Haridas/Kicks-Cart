@@ -35,6 +35,9 @@ class StoreScreen extends StatelessWidget {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is LoadedCategoryState) {
                     List<BrandModel>? categories = state.categories;
+                    categories = categories
+                        .where((category) => !category.blocked)
+                        .toList();
                     if (categories.isEmpty) {
                       return const Center(child: Text('Store is Empty'));
                     } else {
@@ -59,7 +62,7 @@ class StoreScreen extends StatelessWidget {
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             CategoryDetailScreen(
-                                              name: categories[index].name,
+                                              name: categories![index].name,
                                               id: categories[index].id,
                                             ))),
                                 child: Container(
@@ -86,7 +89,7 @@ class StoreScreen extends StatelessWidget {
                                             CircleAvatar(
                                                 maxRadius: 23,
                                                 backgroundImage: NetworkImage(
-                                                    categories[index].image)),
+                                                    categories![index].image)),
                                             kWidth10,
                                             Text(
                                               categories[index].name,

@@ -28,17 +28,27 @@ class _AddToCartBuyNowWidgetsState extends State<AddToCartBuyNowWidgets> {
               children: [
                 MaterialButton(
                   onPressed: () async {
-                    setState(() {
-                      loading = true;
-                    });
-                    CartService cartService = CartService();
-                    await cartService
-                        .addToCart(widget.id, context, selectedSize)
-                        .whenComplete(() {
+                    if (selectedSize.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                          'Please Select a size',
+                          style: TextStyle(color: kWhite),
+                        ),
+                        backgroundColor: kRed,
+                      ));
+                    } else {
                       setState(() {
-                        loading = false;
+                        loading = true;
                       });
-                    });
+                      CartService cartService = CartService();
+                      await cartService
+                          .addToCart(widget.id, context, selectedSize)
+                          .whenComplete(() {
+                        setState(() {
+                          loading = false;
+                        });
+                      });
+                    }
                   },
                   color: kBlueGrey,
                   textColor: kWhite,

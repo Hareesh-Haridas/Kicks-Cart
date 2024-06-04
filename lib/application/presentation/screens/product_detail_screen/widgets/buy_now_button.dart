@@ -43,6 +43,14 @@ class _BuyNowButtonState extends State<BuyNowButton> {
                     backgroundColor: kRed,
                   ),
                 );
+              } else if (selectedSize.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text(
+                    'Please Select a Size',
+                    style: TextStyle(color: kWhite),
+                  ),
+                  backgroundColor: kRed,
+                ));
               } else {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => IndividualProductCheckoutScreen(

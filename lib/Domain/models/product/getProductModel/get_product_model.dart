@@ -5,28 +5,31 @@ class GetProductModel {
   final String productDescription;
   final int stock;
   final String category;
-  String message;
+  final String message;
   final String id;
-  bool isFavorite;
-  GetProductModel(
-      {required this.productImage,
-      required this.productName,
-      required this.productPrice,
-      required this.productDescription,
-      required this.stock,
-      required this.category,
-      required this.message,
-      required this.id,
-      this.isFavorite = false});
+  final bool isFavorite;
+
+  GetProductModel({
+    required this.productImage,
+    required this.productName,
+    required this.productPrice,
+    required this.productDescription,
+    required this.stock,
+    required this.category,
+    required this.message,
+    required this.id,
+    this.isFavorite = false,
+  });
   factory GetProductModel.fromJson(Map<String, dynamic> json) {
     return GetProductModel(
-        productImage: json['image'] != null ? List.from(json['image']) : [],
-        productName: json['name'] ?? '',
-        productPrice: json['price'] ?? 0,
-        productDescription: json['description'] ?? '',
-        stock: json['stock'] ?? 0,
-        category: json['category'] ?? '',
-        message: json['message'] ?? '',
-        id: json['_id'] != null ? json['_id'].toString() : "");
+      productImage: json['image'] != null ? List.from(json['image']) : [],
+      productName: json['name'] ?? '',
+      productPrice: json['price'] ?? 0,
+      productDescription: json['description'] ?? '',
+      stock: json['stock'] ?? 0,
+      category: json['category'] ?? '',
+      message: json['message'] ?? '',
+      id: json['_id'] != null ? json['_id'].toString() : "",
+    );
   }
 }
