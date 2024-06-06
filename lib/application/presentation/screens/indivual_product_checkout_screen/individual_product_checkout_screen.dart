@@ -8,6 +8,7 @@ import 'package:kicks_cart/application/presentation/screens/indivual_product_che
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
 import 'package:kicks_cart/data/service/order/order_functions.dart';
+import 'package:kicks_cart/domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class IndividualProductCheckoutScreen extends StatefulWidget {
@@ -288,11 +289,12 @@ class _IndividualProductCheckoutScreenState
                                     } else {
                                       await orderService
                                           .placeSingleProductOrder(
-                                              selectedAddressId,
-                                              widget.id,
-                                              paymentMethod,
-                                              context,
-                                              widget.selectedSize)
+                                        selectedAddressId,
+                                        widget.id,
+                                        paymentMethod,
+                                        context,
+                                        widget.selectedSize,
+                                      )
                                           .whenComplete(
                                         () {
                                           setState(
@@ -340,8 +342,13 @@ class _IndividualProductCheckoutScreenState
       loading = true;
     });
     try {
-      await orderService.placeSingleProductOrder(selectedAddressId, widget.id,
-          paymentMethod, context, widget.selectedSize);
+      await orderService.placeSingleProductOrder(
+        selectedAddressId,
+        widget.id,
+        paymentMethod,
+        context,
+        widget.selectedSize,
+      );
       setState(() {
         loading = false;
       });

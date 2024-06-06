@@ -6,11 +6,18 @@ import 'package:kicks_cart/application/business_logic/cart/bloc/cart_bloc.dart';
 import 'package:kicks_cart/data/service/products/config.dart';
 import 'package:kicks_cart/domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
 
-class ProductDetailWidget extends StatelessWidget {
+class ProductDetailWidget extends StatefulWidget {
   const ProductDetailWidget({
     super.key,
   });
 
+  @override
+  State<ProductDetailWidget> createState() => _ProductDetailWidgetState();
+}
+
+List<GetCartModel> cartProducts = [];
+
+class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(
@@ -19,6 +26,7 @@ class ProductDetailWidget extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else if (state is LoadedCartState) {
           List<GetCartModel> cart = state.cart;
+          cartProducts = state.cart;
           return ListView.builder(
             physics: const ScrollPhysics(),
             shrinkWrap: true,

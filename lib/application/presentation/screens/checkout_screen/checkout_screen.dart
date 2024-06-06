@@ -11,6 +11,7 @@ import 'package:kicks_cart/application/presentation/screens/checkout_screen/widg
 
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/application/presentation/utils/constants.dart';
+import 'package:kicks_cart/domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -66,6 +67,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     razorpay.clear();
   }
 
+  final List<GetCartModel> passingProducts = [];
   String selectedAddressId = '';
   String selectedAddress = '';
   String paymentMethod = 'Cash on Delivery';
@@ -304,8 +306,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           openCheckout(widget.subTotal);
                                         } else {
                                           await orderService
-                                              .placeorder(selectedAddressId,
-                                                  paymentMethod, context)
+                                              .placeorder(
+                                            selectedAddressId,
+                                            paymentMethod,
+                                            context,
+                                          )
                                               .whenComplete(
                                             () {
                                               setState(
@@ -363,7 +368,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       loading = true;
     });
     try {
-      await orderService.placeorder(selectedAddressId, paymentMethod, context);
+      await orderService.placeorder(
+        selectedAddressId,
+        paymentMethod,
+        context,
+      );
       setState(() {
         loading = false;
       });

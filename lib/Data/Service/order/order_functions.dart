@@ -5,11 +5,17 @@ import 'package:kicks_cart/data/Service/auth/authorization_functions.dart';
 import 'package:kicks_cart/application/presentation/screens/order_placed_screen/order_placed_screen.dart';
 import 'package:kicks_cart/application/presentation/utils/colors.dart';
 import 'package:kicks_cart/data/service/order/config.dart';
+import 'package:kicks_cart/domain/models/cart/addCartModel/getCartModel/get_cart_model.dart';
 import 'package:kicks_cart/domain/models/order/get_order_model.dart';
+
+String orderId = '';
 
 class OrderService {
   Future<void> placeorder(
-      String addressId, String paymentMethod, BuildContext context) async {
+    String addressId,
+    String paymentMethod,
+    BuildContext context,
+  ) async {
     String? authToken = await getAuthToken();
     Map<String, dynamic> data = {
       'addressId': addressId,
@@ -19,12 +25,14 @@ class OrderService {
       final response = await Dio().post(placeOrderUrl,
           data: data,
           options: Options(headers: {'Authorization': '$authToken'}));
+      print(response.data);
       bool status = response.data['status'] ?? false;
       String orderPlacedMessage = response.data['message'] ?? '';
+      orderId = response.data['orderId'] ?? '';
       if (status) {
         if (context.mounted) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const OrderPlacedScreen()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => OrderPlacedScreen()));
           placeOrderShowSnackBar(context, orderPlacedMessage);
         }
       }
@@ -33,8 +41,13 @@ class OrderService {
     }
   }
 
-  Future<void> placeSingleProductOrder(String addressId, String productId,
-      String paymentMethod, BuildContext context, String size) async {
+  Future<void> placeSingleProductOrder(
+    String addressId,
+    String productId,
+    String paymentMethod,
+    BuildContext context,
+    String size,
+  ) async {
     String? authToken = await getAuthToken();
     var regBody = {
       'productId': productId,
@@ -48,10 +61,11 @@ class OrderService {
           options: Options(headers: {'Authorization': '$authToken'}));
       bool status = response.data['status'] ?? false;
       String orderPlacedMessage = response.data['message'] ?? '';
+      orderId = response.data['orderId'] ?? '';
       if (status) {
         if (context.mounted) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const OrderPlacedScreen()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => OrderPlacedScreen()));
           placeOrderShowSnackBar(context, orderPlacedMessage);
         }
       }
@@ -61,12 +75,10 @@ class OrderService {
   }
 
   Future<List<GetOrderModel>> getOrders() async {
-    print('get order');
     String? authToken = await getAuthToken();
     try {
       final response = await Dio().get(getOrderUrl,
           options: Options(headers: {'Authorization': '$authToken'}));
-      print(response.data);
 
       List<dynamic> responseData = response.data['data'];
 
@@ -94,7 +106,6 @@ class OrderService {
   }
 
   Future<List<GetOrderModel>> getOrderDetails(String id) async {
-    print('get order detail');
     String? authToken = await getAuthToken();
     try {
       final response = await Dio().get('$getOrderDetailUrl/$id',
