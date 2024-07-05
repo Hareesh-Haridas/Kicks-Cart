@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kicks_cart/application/presentation/screens/loginscreen/loginscreen.dart';
 import 'package:kicks_cart/data/Service/auth/authorization_functions.dart';
 
 import 'package:kicks_cart/application/presentation/screens/accountcreationscreen/create_account_screen.dart';

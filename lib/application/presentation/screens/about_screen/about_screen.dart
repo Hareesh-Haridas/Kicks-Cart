@@ -25,7 +25,7 @@ class AboutScreen extends StatelessWidget {
                       },
                       icon: const Icon(Icons.arrow_back)),
                   Text(
-                    'Kicks Cart',
+                    'Foot Rush',
                     style: GoogleFonts.bangers(fontSize: 40),
                   )
                 ],
@@ -114,28 +114,6 @@ class AboutScreen extends StatelessWidget {
                 children: [Text("* Usage Data")],
               ),
               kHeight10,
-              Row(
-                children: [
-                  Text(
-                    "Contact Us",
-                    style: GoogleFonts.ptSans(fontSize: 20),
-                  )
-                ],
-              ),
-              kHeight10,
-              const Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                        "If you have any questions about this Privacy Policy, You can contact us:"),
-                  )
-                ],
-              ),
-              kHeight10,
-              const Row(
-                children: [Text("By email: hareeshharidas2003@gmail.com")],
-              ),
-              kHeight30
             ],
           ),
         ),

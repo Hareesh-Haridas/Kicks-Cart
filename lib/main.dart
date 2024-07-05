@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:kicks_cart/application/presentation/screens/onboardingscreens/onboardingscreen_1.dart';
-import 'package:kicks_cart/application/presentation/screens/order_placed_screen/order_placed_screen.dart';
 import 'package:kicks_cart/data/Service/auth/authorization_functions.dart';
 import 'package:kicks_cart/application/widgets/bottomNavigationWidget/root_page.dart';
 import 'package:kicks_cart/application/business_logic/address/bloc/bloc/address_bloc.dart';
@@ -55,7 +54,7 @@ class _MyAppState extends State<MyApp> {
                 GoogleFonts.openSansTextTheme(Theme.of(context).textTheme)),
         home: AnimatedSplashScreen(
           splash: Text(
-            'Kicks Cart',
+            'Foot Rush',
             style: GoogleFonts.bangers(fontSize: 40),
           ),
           nextScreen: FutureBuilder(

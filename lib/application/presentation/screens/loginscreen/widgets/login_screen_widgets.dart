@@ -271,7 +271,7 @@ class KicksCartText extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(
-          'Kicks Cart',
+          'Foot Rush',
           style: GoogleFonts.bangers(fontSize: 40),
         )
       ],
